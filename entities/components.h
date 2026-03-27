@@ -18,6 +18,7 @@ struct MeshComponent {
 };
 
 struct MaterialComponent {
+  unsigned int shaderID;
   unsigned int diffuseTexture;
   unsigned int specularTexuture;
   glm::vec3 ambientColor;

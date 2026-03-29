@@ -14,6 +14,7 @@ struct MeshComponent {
   unsigned int vbo;
   unsigned int eao;
   int indexCount;
+  int vertexCount;
   unsigned textureID;
 };
 

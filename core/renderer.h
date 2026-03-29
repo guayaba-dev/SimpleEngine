@@ -1,11 +1,16 @@
 #pragma once
+#include "../vendor/entt.hpp"
+#include "window.h"
+#include <memory>
 
 namespace Renderer {
 
-void BeginDraw();
-void BeginDraw();
+extern std::shared_ptr<Window> windowPtr;
 
-void drawMeshes();
+void BeginDraw();
+void EndDraw();
+
+void drawMeshes(const entt::registry &world);
 void drawLights();
 
 } // namespace Renderer

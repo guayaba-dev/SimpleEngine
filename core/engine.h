@@ -1,18 +1,24 @@
 #pragma once
 
 #include "../vendor/entt.hpp"
+#include "renderer.h"
 #include "window.h"
+#include <memory>
 
 class Engine {
 
-  entt::entity world;
+  entt::registry world;
 
-  Window window;
+  std::shared_ptr<Window> windowPtr;
 
   // TODO RENDERER
 
 public:
-  void start() { window = Window(); }; // STARTS OPENGL PROFILE
+  void start() {
+    windowPtr = std::make_shared<Window>();
+    Renderer::windowPtr = std::shared_ptr<Window>(windowPtr);
+
+  }; // STARTS OPENGL PROFILE
 
   void run() {
 

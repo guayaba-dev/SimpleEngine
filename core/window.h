@@ -16,4 +16,6 @@ public:
   Window(int width = 800, int height = 600);
 
   static void windowSizeCallBack(GLFWwindow *window, int width, int height);
+
+  GLFWwindow *getWinow() { return window; };
 };

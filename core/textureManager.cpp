@@ -45,3 +45,17 @@ unsigned int TextureManager::loadTexture(const std::string &path) {
 
   return textureID;
 };
+
+TextureManager::~TextureManager() {
+
+  for (auto &par : cachedTextures) {
+
+    if (par.second == 0)
+      continue;
+
+    glDeleteTextures(1, &par.second);
+    par.second = 0;
+  }
+
+  cachedTextures.clear();
+}

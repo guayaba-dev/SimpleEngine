@@ -1,5 +1,6 @@
 #pragma once
 
+#include "inputManager.h"
 #include <GLFW/glfw3.h>
 
 class Window {
@@ -20,4 +21,12 @@ public:
   GLFWwindow *getWinow() { return window; };
 
   bool windowShouldClose() { return glfwWindowShouldClose(window); }
+
+  void checkWindowShouldClose() {
+    if (InputManager::isKeyDown(GLFW_KEY_ESCAPE)) {
+      glfwSetWindowShouldClose(window, true);
+    }
+  }
+
+  ~Window();
 };

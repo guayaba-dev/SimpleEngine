@@ -1,2 +1,0 @@
-/usr/bin/ar qc libCORE_lib.a CMakeFiles/CORE_lib.dir/core/meshManager.cpp.o CMakeFiles/CORE_lib.dir/core/renderer.cpp.o CMakeFiles/CORE_lib.dir/core/shader.cpp.o CMakeFiles/CORE_lib.dir/core/shaderManager.cpp.o CMakeFiles/CORE_lib.dir/core/textureManager.cpp.o CMakeFiles/CORE_lib.dir/core/window.cpp.o
-/usr/bin/ranlib libCORE_lib.a

@@ -1,5 +1,3 @@
-#pragma once
-
 #include "../vendor/glad/glad.h"
 
 #include <GLFW/glfw3.h>
@@ -45,4 +43,9 @@ void Window::setCallBacks() {
 
 void Window::windowSizeCallBack(GLFWwindow *window, int width, int height) {
   glViewport(0, 0, width, height);
+}
+
+Window::~Window() {
+  glfwDestroyWindow(window);
+  glfwTerminate();
 }

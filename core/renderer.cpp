@@ -3,7 +3,6 @@
 
 #include <GL/gl.h>
 #include <GLFW/glfw3.h>
-#include <iostream>
 #include <memory>
 
 #include "../entities/components.h"

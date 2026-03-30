@@ -10,7 +10,7 @@ public:
 
   unsigned int loadTexture(const std::string &path);
 
-  ~TextureManager() = default;
+  ~TextureManager();
 
 private:
   unsigned int loadFromCache(const std::string &path);

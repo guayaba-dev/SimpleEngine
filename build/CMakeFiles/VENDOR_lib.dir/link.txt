@@ -1,2 +1,0 @@
-/usr/bin/ar qc libVENDOR_lib.a CMakeFiles/VENDOR_lib.dir/vendor/glad/src/glad.c.o CMakeFiles/VENDOR_lib.dir/vendor/glm/detail/glm.cpp.o
-/usr/bin/ranlib libVENDOR_lib.a

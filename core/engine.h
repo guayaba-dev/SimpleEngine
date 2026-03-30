@@ -3,6 +3,7 @@
 #include "../vendor/entt.hpp"
 #include "renderer.h"
 #include "window.h"
+#include <iostream>
 #include <memory>
 
 class Engine {
@@ -11,25 +12,29 @@ class Engine {
 
   std::shared_ptr<Window> windowPtr;
 
-  // TODO RENDERER
-
 public:
+  entt::registry &getWorld() { return world; }
+
   void start() {
     windowPtr = std::make_shared<Window>();
+
     Renderer::windowPtr = std::shared_ptr<Window>(windowPtr);
 
   }; // STARTS OPENGL PROFILE
 
   void run() {
 
-    // WHILE(window.should'tClose)
-    // CAMERA MAGIC
-    // BEGINDRAW;
-    // DRAWOBJECTS;
-    // DRAWLIGHTS;
-    // ENDDRAWING;
+    while (!windowPtr->windowShouldClose()) {
 
+      // CAMERA MAGIC
+      Renderer::BeginDraw();
+
+      Renderer::drawMeshes(world);
+
+      // DRAWLIGHTS;
+      Renderer::EndDraw();
+    }
   };
 
-  void shutDown(); // SHUTS DOWN ENGINE
+  void shutDown() {}; // SHUTS DOWN ENGINE
 };

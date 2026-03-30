@@ -18,7 +18,7 @@ Window::Window(int width, int height) {
 }
 
 void Window::createWindow() {
-  window = glfwCreateWindow(800, 600, "GAME-ENGINE", NULL, NULL);
+  window = glfwCreateWindow(width, height, "GAME-ENGINE", NULL, NULL);
 
   if (!window)
     std::cerr << "WINDOW::ERROR::WINDOW_CREATION\n";
@@ -26,9 +26,11 @@ void Window::createWindow() {
 
 void Window::setProfile() {
 
-  glfwWindowHint(GLFW_VERSION_MAJOR, 3);
-  glfwWindowHint(GLFW_VERSION_MINOR, 3);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+  std::cerr << "check setProfile\n";
 }
 
 void Window::setGLAD() {

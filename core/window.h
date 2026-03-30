@@ -18,4 +18,6 @@ public:
   static void windowSizeCallBack(GLFWwindow *window, int width, int height);
 
   GLFWwindow *getWinow() { return window; };
+
+  bool windowShouldClose() { return glfwWindowShouldClose(window); }
 };

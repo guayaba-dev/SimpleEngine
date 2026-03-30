@@ -3,9 +3,13 @@
 
 #include <GL/gl.h>
 #include <GLFW/glfw3.h>
+#include <iostream>
+#include <memory>
 
 #include "../entities/components.h"
 #include "renderer.h"
+
+std::shared_ptr<Window> Renderer::windowPtr = nullptr;
 
 void Renderer::BeginDraw() {
   glfwPollEvents();
@@ -27,7 +31,7 @@ void Renderer::drawMeshes(const entt::registry &world) {
 
     if (mesh.eao == 0) {
       glDrawArrays(GL_TRIANGLES, 0, mesh.vertexCount);
-      return;
+      continue;
     }
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.eao);

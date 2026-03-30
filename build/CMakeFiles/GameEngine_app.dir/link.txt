@@ -1,0 +1,1 @@
+/usr/bin/c++ -fsanitize=address,undefined -fno-omit-frame-pointer -Wl,--dependency-file=CMakeFiles/GameEngine_app.dir/link.d CMakeFiles/GameEngine_app.dir/app.cpp.o -o GameEngine_app  -lGL -lglfw libCORE_lib.a libVENDOR_lib.a

@@ -5,10 +5,18 @@
 
 class MeshManager {
 
+public:
+  MeshManager() = default;
+
+  ~MeshManager() = default;
+
   // unsigned int loadMesh(std::string &path);
-  unsigned int loadMesh(const float vertices[]);
+  void loadMesh(const std::string &name, const float vertices[],
+                const int vertexCount, unsigned &vao, unsigned int &vbo);
 
 private:
-  // std::unordered_map<std::string, unsigned int> cachedMeshes;
+  unsigned int loadFromCache(std::string &name);
+
+  std::unordered_map<std::string, unsigned int> cachedMeshes;
   // std::unordered_map<std::string, unsigned int> cachedMeshes;
 };

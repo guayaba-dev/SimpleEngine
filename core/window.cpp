@@ -11,7 +11,8 @@ Window::Window(int width, int height) {
   createWindow();
   glfwMakeContextCurrent(window);
   setGLAD();
-  glViewport(width, height, 0, 0);
+  glEnable(GL_DEPTH_TEST);
+  glViewport(0, 0, width, height);
   setCallBacks();
 }
 

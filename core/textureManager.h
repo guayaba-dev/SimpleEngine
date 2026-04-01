@@ -3,6 +3,8 @@
 #include <string>
 #include <unordered_map>
 
+#define STB_IMAGE_IMPLEMENTATION
+
 class TextureManager {
 
 public:

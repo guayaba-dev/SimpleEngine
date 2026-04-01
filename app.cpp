@@ -4,13 +4,14 @@
 
 #include "core/meshManager.h"
 #include "core/shaderManager.h"
+#include "core/textureManager.h"
 #include <string>
 
 float square[] = {
     -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, // bottom left
     -0.5f, 0.5f,  0.0f, 0.0f, 1.0f, // top left
     0.5f,  -0.5f, 0.0f, 1.0f, 0.0f, // bottom right
-    0.5f,  0.5f,  0.0f, .0f,  1.0f, // top right
+    0.5f,  0.5f,  0.0f, 1.0f, 1.0f, // top right
     0.5f,  -0.5f, 0.0f, 1.0f, 0.0f, // bottom right
     -0.5f, 0.5f,  0.0f, 0.0f, 1.0f, // top left
 };
@@ -19,12 +20,14 @@ int main(int argc, char *argv[]) {
   Engine engine = Engine();
   engine.start();
 
+  TextureManager texMag = TextureManager();
   MeshManager meshMag = MeshManager();
   ShaderManager shaderMag = ShaderManager();
 
   MeshComponent asf;
   meshMag.loadMesh("square", square, 6, asf.vao, asf.vbo);
   asf.vertexCount = 6;
+  asf.textureID = texMag.loadTexture("assets/container.jpg");
 
   MaterialComponent maf;
 

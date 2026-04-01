@@ -9,9 +9,9 @@ unsigned int TextureManager::loadFromCache(const std::string &path) {
   auto res_find = cachedTextures.find(path);
 
   if (res_find != cachedTextures.end())
-    return 0;
+    return cachedTextures.at(path);
 
-  return cachedTextures.at(path);
+  return 0;
 }
 
 unsigned int TextureManager::loadTexture(const std::string &path) {
@@ -31,7 +31,7 @@ unsigned int TextureManager::loadTexture(const std::string &path) {
 
   int width, height, rchanells;
 
-  unsigned char *data = stbi_load(path.c_str(), &width, &height, &rchanells, 0);
+  unsigned char *data = stbi_load(path.c_str(), &width, &height, &rchanells, 4);
 
   if (!data) {
     std::cerr << "ERROR::TEXTUREMANAGER::loadTexture::" << path;
@@ -41,7 +41,11 @@ unsigned int TextureManager::loadTexture(const std::string &path) {
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, GL_FALSE, GL_RGBA,
                GL_UNSIGNED_BYTE, data);
 
+  glGenerateMipmap(GL_TEXTURE_2D);
+
   stbi_image_free(data);
+
+  cachedTextures.emplace(path, textureID);
 
   return textureID;
 };

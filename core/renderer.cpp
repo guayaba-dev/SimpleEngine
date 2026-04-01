@@ -28,6 +28,9 @@ void Renderer::drawMeshes(const entt::registry &world) {
     glBindVertexArray(mesh.vao);
     glBindBuffer(GL_ARRAY_BUFFER, mesh.vbo);
 
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, mesh.textureID);
+
     if (mesh.eao == 0) {
       glDrawArrays(GL_TRIANGLES, 0, mesh.vertexCount);
       continue;

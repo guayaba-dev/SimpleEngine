@@ -97,12 +97,16 @@ unsigned int ShaderManager::loadShader(const std::string &name,
   glAttachShader(ID, fragmentShader);
   glLinkProgram(ID);
 
+  glUseProgram(ID);
+
   glGetProgramiv(ID, GL_LINK_STATUS, &success);
 
   if (!success) {
     glGetProgramInfoLog(ID, 512, NULL, infoLog);
     std::cerr << "ERROR::SHADER::PROGRAM::LINK_FAILED\n" << infoLog << "\n";
   }
+
+  glUniform1i(glGetUniformLocation(ID, "texture1"), 0);
 
   glDeleteShader(vertexShader);
   glDeleteShader(fragmentShader);

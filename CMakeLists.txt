@@ -8,8 +8,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(OpenGL REQUIRED)
 find_package(GLFW 3.3 QUIET)
 
-add_compile_options(-fsanitize=address,undefined -fno-omit-frame-pointer)
-add_link_options(-fsanitize=address,undefined -fno-omit-frame-pointer)
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")                                                  
+    add_compile_options(-fsanitize=undefined -g -O0 -Wall)
+    add_link_options(-fsanitize=undefined)
+else()                                                                                 
+  add_compile_options(-O2 -Wall -Wextra)                                                      
+endif()
 
 file(GLOB CORE_FILES core/*.cpp core/*.c)
 file(GLOB_RECURSE VENDOR_FILES vendor/*.cpp vendor/*.c)

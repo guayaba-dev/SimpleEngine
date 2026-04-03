@@ -1,11 +1,20 @@
 #pragma once
 
 #include "../entities/components.h"
-#include "../vendor/glm/glm.hpp"
+#include "../vendor/entt.hpp"
 
 namespace System {
 
-glm::mat4 getModelMat(TransformComponent &transform);
+void getModelMat(TransformComponent &transform);
 
-void update() {};
+void moveCamera(CameraComponent &camera);
+
+glm::mat4 getCameraView(CameraComponent &camera, TransformComponent &transform);
+
+glm::mat4 getCameraProjection(CameraComponent &camera);
+
+void update(float deltaTime, entt::registry &world);
+
+void updateCamera(float deltaTime, entt::registry &world);
+
 } // namespace System

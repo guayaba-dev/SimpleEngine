@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../systems/system.h"
 #include "../vendor/entt.hpp"
 #include "inputManager.h"
 #include "renderer.h"
+#include "systems/system.h"
 #include "window.h"
 #include <GLFW/glfw3.h>
 #include <iostream>
@@ -33,15 +33,18 @@ public:
 
     while (!windowPtr->windowShouldClose()) {
 
+      // WINDOW LOGIC
+      windowPtr->checkWindowShouldClose();
+
+      // DELTA TIME
       float time = glfwGetTime();
       float dt = time - lastTime;
       lastTime = time;
 
-      windowPtr->checkWindowShouldClose();
-
-      System::update();
-
       // CAMERA MAGIC
+      System::moveCamera(world.ctx().get<CameraComponent>());
+      System::updateTransforms(dt, world);
+
       Renderer::BeginDraw();
       Renderer::drawMeshes(world);
       Renderer::EndDraw();

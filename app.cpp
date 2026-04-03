@@ -40,6 +40,11 @@ int main(int argc, char *argv[]) {
 
   registry.emplace<MeshComponent>(entity, asf);
   registry.emplace<MaterialComponent>(entity, maf);
+  auto &transform = registry.emplace<TransformComponent>(entity);
+  transform.position = glm::vec3(0.f, 0.f, 1.0f);
+
+  registry.ctx().emplace<CameraComponent>();
+  registry.ctx().emplace<TransformComponent>();
 
   engine.run();
 

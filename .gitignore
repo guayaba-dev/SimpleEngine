@@ -1,2 +1,4 @@
 [B-b]uild/
-badloc
+badloc.txt
+.cache
+compile_commands.json

@@ -9,6 +9,8 @@ void getModelMat(TransformComponent &transform);
 
 void moveCamera(CameraComponent &camera);
 
+void cameraInput(CameraComponent &camera, TransformComponent &transform);
+
 glm::mat4 getCameraView(CameraComponent &camera, TransformComponent &transform);
 
 glm::mat4 getCameraProjection(CameraComponent &camera, float aspectRatio);

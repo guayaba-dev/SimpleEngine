@@ -42,6 +42,8 @@ public:
       lastTime = time;
 
       // CAMERA MAGIC
+      System::cameraInput(world.ctx().get<CameraComponent>(),
+                          world.ctx().get<TransformComponent>());
       System::moveCamera(world.ctx().get<CameraComponent>());
       System::updateTransforms(dt, world);
 

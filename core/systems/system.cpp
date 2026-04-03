@@ -86,4 +86,23 @@ void updateTransforms(float deltaTime, entt::registry &world) {
   }
 }
 
+void cameraInput(CameraComponent &camera, TransformComponent &transform) {
+
+  glm::vec3 right = glm::cross(camera.zDir, glm::vec3(0, 1, 0));
+
+  right = glm::normalize(right);
+
+  if (InputManager::isKeyDown(GLFW_KEY_W))
+    transform.position += camera.zDir * 0.5f;
+
+  if (InputManager::isKeyDown(GLFW_KEY_S))
+    transform.position -= camera.zDir * 0.5f;
+
+  if (InputManager::isKeyDown(GLFW_KEY_D))
+    transform.position += right * 0.5f;
+
+  if (InputManager::isKeyDown(GLFW_KEY_A))
+    transform.position -= right * 0.5f;
+}
+
 } // namespace System

@@ -1,5 +1,9 @@
-/home/juandev/CodingProjects/Personal/GameEngine/build/CMakeFiles/CORE_lib.dir
-/home/juandev/CodingProjects/Personal/GameEngine/build/CMakeFiles/VENDOR_lib.dir
 /home/juandev/CodingProjects/Personal/GameEngine/build/CMakeFiles/GameEngine_app.dir
 /home/juandev/CodingProjects/Personal/GameEngine/build/CMakeFiles/edit_cache.dir
 /home/juandev/CodingProjects/Personal/GameEngine/build/CMakeFiles/rebuild_cache.dir
+/home/juandev/CodingProjects/Personal/GameEngine/build/core/CMakeFiles/core.dir
+/home/juandev/CodingProjects/Personal/GameEngine/build/core/CMakeFiles/edit_cache.dir
+/home/juandev/CodingProjects/Personal/GameEngine/build/core/CMakeFiles/rebuild_cache.dir
+/home/juandev/CodingProjects/Personal/GameEngine/build/vendor/CMakeFiles/vendor.dir
+/home/juandev/CodingProjects/Personal/GameEngine/build/vendor/CMakeFiles/edit_cache.dir
+/home/juandev/CodingProjects/Personal/GameEngine/build/vendor/CMakeFiles/rebuild_cache.dir

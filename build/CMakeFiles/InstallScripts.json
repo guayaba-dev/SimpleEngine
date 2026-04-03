@@ -1,7 +1,9 @@
 {
 	"InstallScripts" : 
 	[
-		"/home/juandev/CodingProjects/Personal/GameEngine/build/cmake_install.cmake"
+		"/home/juandev/CodingProjects/Personal/GameEngine/build/cmake_install.cmake",
+		"/home/juandev/CodingProjects/Personal/GameEngine/build/core/cmake_install.cmake",
+		"/home/juandev/CodingProjects/Personal/GameEngine/build/vendor/cmake_install.cmake"
 	],
 	"Parallel" : false
 }

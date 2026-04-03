@@ -1,10 +1,12 @@
-#include "core/engine.h"
 
-#include "entities/components.h"
+#include <core/pch.hpp>
 
-#include "core/meshManager.h"
-#include "core/shaderManager.h"
-#include "core/textureManager.h"
+#include <core/components.h>
+#include <core/engine.h>
+#include <core/meshManager.h>
+#include <core/shaderManager.h>
+#include <core/textureManager.h>
+
 #include <string>
 
 float square[] = {
@@ -41,7 +43,7 @@ int main(int argc, char *argv[]) {
   registry.emplace<MeshComponent>(entity, asf);
   registry.emplace<MaterialComponent>(entity, maf);
   auto &transform = registry.emplace<TransformComponent>(entity);
-  transform.position = glm::vec3(0.f, 0.f, 1.0f);
+  transform.position = glm::vec3(0.f, 0.f, 3.0f);
 
   registry.ctx().emplace<CameraComponent>();
   registry.ctx().emplace<TransformComponent>();

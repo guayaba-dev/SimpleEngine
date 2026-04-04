@@ -7,6 +7,7 @@ namespace InputManager {
 void init(GLFWwindow *window) {
   glfwSetKeyCallback(window, KeyCallback);
   glfwSetCursorPosCallback(window, mouseCallback);
+  glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 bool isKeyDown(int key) { return keys[key]; }

@@ -7,8 +7,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Debug flags
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    add_compile_options(-fsanitize=undefined -g -O0 -Wall)
-    add_link_options(-fsanitize=undefined)
+    add_compile_options(-fsanitize=address -fsanitize=undefined -g -Wall -O0)
+    add_link_options(-fsanitize=address -fsanitize=undefined)
 else()
     add_compile_options(-O2 -Wall -Wextra)
 endif()

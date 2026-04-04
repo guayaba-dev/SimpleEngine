@@ -1,8 +1,7 @@
-#include <core/system.h>
+#include <core/pch.hpp>
 
 #include <core/inputManager.h>
-
-#include <core/pch.hpp>
+#include <core/system.h>
 
 namespace System {
 
@@ -80,23 +79,24 @@ void updateTransforms(float deltaTime, entt::registry &world) {
   }
 }
 
-void cameraInput(CameraComponent &camera, TransformComponent &transform) {
+void cameraInput(CameraComponent &camera, TransformComponent &transform,
+                 float dt) {
 
   glm::vec3 right = glm::cross(camera.zDir, glm::vec3(0, 1, 0));
 
   right = glm::normalize(right);
 
   if (InputManager::isKeyDown(GLFW_KEY_W))
-    transform.position += camera.zDir * 0.5f;
+    transform.position += camera.zDir * 3.5f * dt;
 
   if (InputManager::isKeyDown(GLFW_KEY_S))
-    transform.position -= camera.zDir * 0.5f;
+    transform.position -= camera.zDir * 3.5f * dt;
 
   if (InputManager::isKeyDown(GLFW_KEY_D))
-    transform.position += right * 0.5f;
+    transform.position += right * 3.5f * dt;
 
   if (InputManager::isKeyDown(GLFW_KEY_A))
-    transform.position -= right * 0.5f;
+    transform.position -= right * 3.5f * dt;
 }
 
 } // namespace System

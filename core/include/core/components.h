@@ -1,36 +1,38 @@
 #pragma once
 
+#include "ext/matrix_float4x4.hpp"
+#include "ext/vector_float3.hpp"
 #include <core/pch.hpp>
 
 struct TransformComponent {
-  glm::mat4 modelMatrix;
+  glm::mat4 modelMatrix = glm::mat4(1.0);
   glm::vec3 position = glm::vec3(0.0f);
   glm::vec3 rotation = glm::vec3(0.0f);
   glm::vec3 scale = glm::vec3(1.0f);
 };
 
 struct MeshComponent {
-  unsigned int vao;
-  unsigned int vbo;
-  unsigned int eao;
-  int indexCount;
-  int vertexCount;
-  unsigned textureID;
+  unsigned int vao = 0;
+  unsigned int vbo = 0;
+  unsigned int eao = 0;
+  int indexCount = 0;
+  int vertexCount = 0;
+  unsigned textureID = 0;
 };
 
 struct MaterialComponent {
-  unsigned int shaderID;
-  unsigned int diffuseTexture;
-  unsigned int specularTexuture;
-  glm::vec3 ambientColor;
-  float shininess;
+  unsigned int shaderID = 0;
+  unsigned int diffuseTexture = 0;
+  unsigned int specularTexuture = 0;
+  glm::vec3 ambientColor = glm::vec3(0);
+  float shininess = 0;
 };
 
 struct LightComponent {
-  glm::vec3 position;
-  glm::vec3 color;
-  float intensity;
-  bool isDirectional;
+  glm::vec3 position = glm::vec3(0.0);
+  glm::vec3 color = glm::vec3(0.0);
+  float intensity = 0;
+  bool isDirectional = 0;
 };
 
 struct CameraComponent {

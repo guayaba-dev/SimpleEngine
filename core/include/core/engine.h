@@ -44,12 +44,15 @@ public:
 
       // CAMERA MAGIC
       System::cameraInput(world.ctx().get<CameraComponent>(),
-                          world.ctx().get<TransformComponent>());
+                          world.ctx().get<TransformComponent>(), dt);
+
       System::moveCamera(world.ctx().get<CameraComponent>());
       System::updateTransforms(dt, world);
 
       Renderer::BeginDraw();
+
       Renderer::drawMeshes(world);
+
       Renderer::EndDraw();
     }
   };

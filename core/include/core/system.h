@@ -9,7 +9,8 @@ void getModelMat(TransformComponent &transform);
 
 void moveCamera(CameraComponent &camera);
 
-void cameraInput(CameraComponent &camera, TransformComponent &transform);
+void cameraInput(CameraComponent &camera, TransformComponent &transform,
+                 float dt);
 
 glm::mat4 getCameraView(CameraComponent &camera, TransformComponent &transform);
 

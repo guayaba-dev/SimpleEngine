@@ -1,5 +1,6 @@
 #include <core/pch.hpp>
 
+#include <iostream>
 #include <memory>
 
 #include <core/components.h>
@@ -39,11 +40,11 @@ void Renderer::drawMeshes(entt::registry &world) {
     glUniformMatrix4fv(glGetUniformLocation(material.shaderID, "projection"), 1,
                        GL_FALSE, glm::value_ptr(projectionMat));
 
-    glBindVertexArray(mesh.vao);
-    glBindBuffer(GL_ARRAY_BUFFER, mesh.vbo);
-
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, mesh.textureID);
+
+    glBindVertexArray(mesh.vao);
+    glBindBuffer(GL_ARRAY_BUFFER, mesh.vbo);
 
     if (mesh.eao == 0) {
       glDrawArrays(GL_TRIANGLES, 0, mesh.vertexCount);

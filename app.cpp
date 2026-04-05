@@ -18,7 +18,7 @@ float square[] = {
     -0.5f, 0.5f,  0.0f, 0.0f, 1.0f, // top left
 };
 
-int main(int argc, char *argv[]) {
+int main() {
   Engine engine = Engine();
   engine.start();
 

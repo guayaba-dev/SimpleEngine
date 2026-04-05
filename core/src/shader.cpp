@@ -1,5 +1,8 @@
 #include <core/pch.hpp>
 #include <core/shader.h>
+#include <fstream>
+#include <iostream>
+#include <sstream>
 
 Shader::Shader(const char *vertexPath, const char *framentPath) {
 
@@ -25,9 +28,10 @@ Shader::Shader(const char *vertexPath, const char *framentPath) {
     vShaderSrc = vertexSteam.str();
     fShaderSrc = fragmentSteam.str();
 
-  } catch (std::fstream::failure) {
+  } catch (std::fstream::failure &e) {
 
-    std::cerr << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_OPENED\n"
+    std::cerr << e.what() << "\n"
+              << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_OPENED\n"
               << "ERROR::SHADER::VERTEX::PATH" << vertexPath << "\n"
               << "ERROR::SHADER::FRAGMENT::PATH" << framentPath << "\n";
   }

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <core/components.h>
 #include <string>
 #include <unordered_map>
 
@@ -12,7 +13,10 @@ public:
 
   // unsigned int loadMesh(std::string &path);
   void loadMesh(const std::string &name, const float vertices[],
-                const int vertexCount, unsigned &vao, unsigned int &vbo);
+                const int vertexSize, MeshComponent &mesh);
+
+  void loadNormalMesh(const std::string &name, const float vertices[],
+                      const int vertexSize, MeshComponent &mesh);
 
 private:
   unsigned int loadFromCache(std::string &name);

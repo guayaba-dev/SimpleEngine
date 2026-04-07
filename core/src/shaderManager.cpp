@@ -50,9 +50,10 @@ unsigned int ShaderManager::loadShader(const std::string &name,
     vShaderSrc = vertexSteam.str();
     fShaderSrc = fragmentSteam.str();
 
-  } catch (std::fstream::failure) {
+  } catch (std::fstream::failure &e) {
 
-    std::cerr << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_OPENED\n"
+    std::cerr << e.what() << '\n'
+              << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_OPENED\n"
               << "ERROR::SHADER::VERTEX::PATH" << vertexPath << "\n"
               << "ERROR::SHADER::FRAGMENT::PATH" << framentPath << "\n";
   }
@@ -105,8 +106,6 @@ unsigned int ShaderManager::loadShader(const std::string &name,
     glGetProgramInfoLog(ID, 512, NULL, infoLog);
     std::cerr << "ERROR::SHADER::PROGRAM::LINK_FAILED\n" << infoLog << "\n";
   }
-
-  glUniform1i(glGetUniformLocation(ID, "texture1"), 0);
 
   glDeleteShader(vertexShader);
   glDeleteShader(fragmentShader);

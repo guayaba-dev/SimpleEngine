@@ -1,3 +1,4 @@
+#include "gtc/type_ptr.hpp"
 #include <core/pch.hpp>
 
 #include <iostream>
@@ -40,8 +41,12 @@ void Renderer::drawMeshes(entt::registry &world) {
     glUniformMatrix4fv(glGetUniformLocation(material.shaderID, "projection"), 1,
                        GL_FALSE, glm::value_ptr(projectionMat));
 
+    glUniform3fv(glGetUniformLocation(material.shaderID, "ambientColor"), 1,
+                 glm::value_ptr(material.ambientColor));
+
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mesh.textureID);
+    glUniform1i(glGetUniformLocation(material.shaderID, "texture1"), 0);
+    glBindTexture(GL_TEXTURE_2D, material.textureID);
 
     glBindVertexArray(mesh.vao);
     glBindBuffer(GL_ARRAY_BUFFER, mesh.vbo);

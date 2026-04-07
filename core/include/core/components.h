@@ -17,15 +17,15 @@ struct MeshComponent {
   unsigned int eao = 0;
   int indexCount = 0;
   int vertexCount = 0;
-  unsigned textureID = 0;
 };
 
 struct MaterialComponent {
   unsigned int shaderID = 0;
   unsigned int diffuseTexture = 0;
   unsigned int specularTexuture = 0;
-  glm::vec3 ambientColor = glm::vec3(0);
+  unsigned int textureID = 0;
   float shininess = 0;
+  glm::vec3 ambientColor = glm::vec3(0);
 };
 
 struct LightComponent {

@@ -3,9 +3,6 @@
 
 #include <core/components.h>
 #include <core/engine.h>
-#include <core/meshManager.h>
-#include <core/shaderManager.h>
-#include <core/textureManager.h>
 
 #include <string>
 
@@ -22,19 +19,15 @@ int main() {
   Engine engine = Engine();
   engine.start();
 
-  TextureManager texMag = TextureManager();
-  MeshManager meshMag = MeshManager();
-  ShaderManager shaderMag = ShaderManager();
-
   MeshComponent asf;
-  meshMag.loadMesh("square", square, 6, asf.vao, asf.vbo);
+  Engine::meshMag.loadMesh("square", square, 6, asf.vao, asf.vbo);
   asf.vertexCount = 6;
-  asf.textureID = texMag.loadTexture("assets/container.jpg");
+  asf.textureID = Engine::texMag.loadTexture("assets/container.jpg");
 
   MaterialComponent maf;
 
-  maf.shaderID = shaderMag.loadShader("basicShader", "assets/basic.vert",
-                                      "assets/basic.frag");
+  maf.shaderID = Engine::shaderMag.loadShader(
+      "basicShader", "assets/basic.vert", "assets/basic.frag");
 
   auto &registry = engine.getWorld();
 

@@ -2,6 +2,9 @@
 
 #include <entt.hpp>
 
+#include "core/meshManager.h"
+#include "core/shaderManager.h"
+#include "core/textureManager.h"
 #include "inputManager.h"
 #include "renderer.h"
 #include "system.h"
@@ -17,9 +20,14 @@ class Engine {
   std::shared_ptr<Window> windowPtr;
 
 public:
+  static inline MeshManager meshMag{};
+  static inline TextureManager texMag{};
+  static inline ShaderManager shaderMag{};
+
   entt::registry &getWorld() { return world; }
 
   void start() {
+
     windowPtr = std::make_shared<Window>();
 
     Renderer::windowPtr = std::shared_ptr<Window>(windowPtr);

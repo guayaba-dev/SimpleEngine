@@ -88,12 +88,11 @@ int main() {
   lightMaterial.ambientColor = glm::vec3(1.0);
 
   LightComponent lightComponent;
-  lightComponent.position = glm::vec3(3., 3., 2.);
   lightComponent.color = glm::vec3(1., 1., 1.);
   lightComponent.intensity = 0.6;
 
   TransformComponent lightTransform;
-  lightTransform.position = glm::vec3(3., 1., 1.);
+  lightTransform.position = glm::vec3(0., 2., 1.);
 
   auto &registry = engine.getWorld();
 

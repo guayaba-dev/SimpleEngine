@@ -7,9 +7,12 @@ uniform vec3 lightColor;
 in vec3 ndc;
 in vec3 fragNormal;
 
+vec3 norm = normalize(fragNormal);
+vec3 lightDir = normalize(lightPos - ndc);
 
 void main(){
-  vec3 targetVec = normalize(lightPos - ndc);
-  vec3 diffuse = max(dot(targetVec, fragNormal), 0.01) * lightColor;
-  gl_FragColor = vec4(diffuse * ambientColor, 1.0);
+  float lightAmount = max(dot(lightDir, fragNormal), 0.0);
+  vec3 result =  ambientColor * lightAmount;
+
+  gl_FragColor = vec4(result, 1.0);
 }

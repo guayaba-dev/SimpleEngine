@@ -46,7 +46,7 @@ void bindLights(const LightComponent &light,
                 const MaterialComponent &material) {
 
   glUniform3fv(glGetUniformLocation(material.shaderID, "lightPos"), 1,
-               glm::value_ptr(light.position));
+               glm::value_ptr(glm::vec3(0., 2., 1.)));
 
   glUniform3fv(glGetUniformLocation(material.shaderID, "lightColor"), 1,
                glm::value_ptr(light.color));

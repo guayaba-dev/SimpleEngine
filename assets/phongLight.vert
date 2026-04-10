@@ -11,7 +11,7 @@ out vec3 ndc;
 out vec3 fragNormal;
 
 void main(){
-  fragNormal = vNormal;
-  ndc = (model * vec4(vPos, 1.0)).xyz;
   gl_Position = projection * view * model * vec4(vPos, 1.0);
+  ndc = (model * vec4(vPos, 1.0)).xyz;
+  fragNormal = vNormal;
 }

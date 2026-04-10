@@ -11,6 +11,14 @@ struct TransformComponent {
   glm::vec3 scale = glm::vec3(1.0f);
 };
 
+struct PhongComponent {
+  unsigned int diffuseMap;
+  unsigned int specularMap;
+  glm::vec3 diffuseColor;
+  glm::vec3 specularColor;
+  float shininess;
+};
+
 struct MeshComponent {
   unsigned int vao = 0;
   unsigned int vbo = 0;
@@ -29,10 +37,10 @@ struct MaterialComponent {
 };
 
 struct LightComponent {
-  glm::vec3 position = glm::vec3(0.0);
-  glm::vec3 color = glm::vec3(0.0);
-  float intensity = 0;
-  bool isDirectional = 0;
+  glm::vec3 color;
+  float intensity;
+  float radius;
+  unsigned int shadowMap;
 };
 
 struct CameraComponent {

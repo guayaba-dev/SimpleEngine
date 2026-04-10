@@ -1,5 +1,7 @@
 
 #include "core/meshManager.h"
+#include "detail/qualifier.hpp"
+#include "fwd.hpp"
 #include <core/pch.hpp>
 
 #include <core/components.h>
@@ -78,19 +80,38 @@ int main() {
   MaterialComponent squareMaterial;
   squareMaterial.shaderID = Engine::shaderMag.loadShader(
       "PhongShading", "assets/phongLight.vert", "assets/phongLight.frag");
-  squareMaterial.ambientColor = glm::vec3(1.0, 0.0, 0.2);
+  squareMaterial.ambientColor = glm::vec3(0.6, 0.1, 0.2);
+
+  MaterialComponent lightMaterial;
+  lightMaterial.shaderID = Engine::shaderMag.loadShader(
+      "LightShader", "assets/basic.vert", "assets/basic.frag");
+  lightMaterial.ambientColor = glm::vec3(1.0);
+
+  LightComponent lightComponent;
+  lightComponent.position = glm::vec3(3., 3., 2.);
+  lightComponent.color = glm::vec3(1., 1., 1.);
+  lightComponent.intensity = 0.6;
+
+  TransformComponent lightTransform;
+  lightTransform.position = glm::vec3(3., 1., 1.);
 
   auto &registry = engine.getWorld();
 
   auto entity = registry.create();
+  auto light = registry.create();
 
   registry.emplace<MeshComponent>(entity, squareMesh);
   registry.emplace<MaterialComponent>(entity, squareMaterial);
   auto &transform = registry.emplace<TransformComponent>(entity);
   transform.position = glm::vec3(0.f, 0.f, 3.0f);
 
+  registry.emplace<MeshComponent>(light, squareMesh);
+  registry.emplace<TransformComponent>(light, lightTransform);
+  registry.emplace<MaterialComponent>(light, lightMaterial);
+
   registry.ctx().emplace<CameraComponent>();
   registry.ctx().emplace<TransformComponent>();
+  registry.ctx().emplace<LightComponent>(lightComponent);
 
   engine.run();
 

@@ -56,6 +56,8 @@ public:
       System::moveCamera(world.ctx().get<CameraComponent>());
       System::updateTransforms(dt, world);
 
+      Renderer::genMatrix(world);
+
       Renderer::BeginDraw();
 
       Renderer::drawMeshes(world);

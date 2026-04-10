@@ -7,7 +7,11 @@ uniform mat4 model;
 uniform mat4 view;       
 uniform mat4 projection; 
 
+out vec3 ndc;
+out vec3 fragNormal;
 
 void main(){
+  fragNormal = vNormal;
+  ndc = (model * vec4(vPos, 1.0)).xyz;
   gl_Position = projection * view * model * vec4(vPos, 1.0);
 }

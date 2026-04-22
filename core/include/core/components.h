@@ -1,5 +1,6 @@
 #pragma once
 
+#include "detail/qualifier.hpp"
 #include "ext/matrix_float4x4.hpp"
 #include "ext/vector_float3.hpp"
 #include <core/pch.hpp>
@@ -12,11 +13,12 @@ struct TransformComponent {
 };
 
 struct PhongComponent {
-  unsigned int diffuseMap;
-  unsigned int specularMap;
-  glm::vec3 diffuseColor;
-  glm::vec3 specularColor;
-  float shininess;
+  unsigned int shaderID = 0;
+  unsigned int diffuseMap = 0;
+  unsigned int specularMap = 0;
+  float shininess = 0;
+  glm::vec3 diffuseColor = glm::vec3(1.);
+  glm::vec3 specularColor = glm::vec3(1.);
 };
 
 struct MeshComponent {
@@ -37,10 +39,10 @@ struct MaterialComponent {
 };
 
 struct LightComponent {
-  glm::vec3 color;
-  float intensity;
-  float radius;
-  unsigned int shadowMap;
+  unsigned int shadowMap = 0;
+  float intensity = 0;
+  float radius = 0;
+  glm::vec3 color = glm::vec3(1.);
 };
 
 struct CameraComponent {

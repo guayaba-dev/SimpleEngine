@@ -92,7 +92,7 @@ int main() {
   lightComponent.intensity = 0.6;
 
   TransformComponent lightTransform;
-  lightTransform.position = glm::vec3(0., 2., 1.);
+  lightTransform.position = glm::vec3(4., 4., 1.);
 
   auto &registry = engine.getWorld();
 

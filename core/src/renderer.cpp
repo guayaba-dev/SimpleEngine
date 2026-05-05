@@ -1,5 +1,6 @@
 #include "fwd.hpp"
 #include "gtc/type_ptr.hpp"
+#include <cmath>
 #include <core/pch.hpp>
 
 #include <memory>
@@ -82,9 +83,13 @@ void drawMesh(const MeshComponent &mesh) {
 }
 
 void drawEntity(const MaterialComponent &material, const glm::mat4 &modelMatrix,
-                const MeshComponent &mesh, const LightComponent &light) {
+                const MeshComponent &mesh, const LightComponent &light,
+                const TransformComponent &camera) {
 
   bindMaterial(material);
+
+  glUniform3fv(glGetUniformLocation(material.shaderID, "viewPos"), 1,
+               glm::value_ptr(camera.position));
 
   bindLights(light, material);
 
@@ -101,9 +106,11 @@ void Renderer::drawMeshes(entt::registry &world) {
       world.view<MaterialComponent, MeshComponent, TransformComponent>();
 
   auto lightComponent = world.ctx().emplace<LightComponent>();
+  auto &transformComponent = world.ctx().get<TransformComponent>();
 
   for (auto [entity, material, mesh, transform] : view.each()) {
-    drawEntity(material, transform.modelMatrix, mesh, lightComponent);
+    drawEntity(material, transform.modelMatrix, mesh, lightComponent,
+               transformComponent);
   };
 }
 

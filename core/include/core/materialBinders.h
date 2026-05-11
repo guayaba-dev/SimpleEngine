@@ -1,13 +1,24 @@
 // material_binders.hpp
 #pragma once
 #include <core/components.h>
+#include <vector>
 
 // Cada binder recibe el shaderID y los datos que necesita
 namespace MaterialBinder {
 
+struct lightData {
+  glm::vec3 position;
+  glm::vec3 color;
+  float intensity;
+};
+
 inline void bind(const PhongMaterial &mat, const glm::mat4 &model,
                  const glm::mat4 &view, const glm::mat4 &proj,
-                 const glm::vec3 &viewPos, const LightComponent &light) {
+                 const glm::vec3 &viewPos,
+                 const std::vector<lightData> &lights) {
+
+  auto &light = lights[0];
+
   glUseProgram(mat.shaderID);
 
   // Matrices
@@ -24,7 +35,7 @@ inline void bind(const PhongMaterial &mat, const glm::mat4 &model,
 
   // Light
   glUniform3fv(glGetUniformLocation(mat.shaderID, "lightPos"), 1,
-               glm::value_ptr(glm::vec3(0.f, 2.f, 1.f)));
+               glm::value_ptr(light.position));
   glUniform3fv(glGetUniformLocation(mat.shaderID, "lightColor"), 1,
                glm::value_ptr(light.color));
 

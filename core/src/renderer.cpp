@@ -7,11 +7,15 @@
 #include <core/materialBinders.h>
 #include <core/renderer.h>
 #include <core/system.h>
+#include <vector>
 
 static glm::mat4 m_view = glm::mat4(1.f);
 static glm::mat4 m_projection = glm::mat4(1.f);
 
 std::shared_ptr<Window> Renderer::windowPtr = nullptr;
+entt::entity Renderer::activeCamera = entt::null;
+
+void Renderer::setActiveCamera(entt::entity &cam) { activeCamera = cam; };
 
 void Renderer::BeginDraw() {
   glfwPollEvents();
@@ -19,14 +23,18 @@ void Renderer::BeginDraw() {
 };
 
 void Renderer::genMatrix(entt::registry &world) {
-  auto &camera = world.ctx().get<CameraComponent>();
-  auto &transform = world.ctx().get<TransformComponent>();
+  if (activeCamera == entt::null)
+    return;
+
+  auto &camera = world.get<CameraComponent>(activeCamera);
+  auto &transform = world.get<TransformComponent>(activeCamera);
 
   m_view = System::getCameraView(camera, transform);
-  m_projection = System::getCameraProjection(camera, 800.0f / 600);
+  m_projection =
+      System::getCameraProjection(camera, windowPtr->getAspectRatio());
 }
 
-void Renderer::EndDraw() { glfwSwapBuffers(Renderer::windowPtr->getWinow()); }
+void Renderer::EndDraw() { glfwSwapBuffers(Renderer::windowPtr->getWindow()); }
 
 void bindMesh(const MeshComponent &mesh) {
   glBindVertexArray(mesh.vao);
@@ -48,20 +56,37 @@ void drawMesh(const MeshComponent &mesh) {
 
 void Renderer::drawMeshes(entt::registry &world) {
 
-  auto lightComponent = world.ctx().emplace<LightComponent>();
-  auto &transformComponent = world.ctx().get<TransformComponent>();
+  if (activeCamera == entt::null)
+    return;
 
-  auto view = world.view<PhongMaterial, MeshComponent, TransformComponent>();
+  std::vector<MaterialBinder::lightData> lights;
+  auto lightView = world.view<LightComponent, TransformComponent>();
+  for (auto [entity, light, transform] : lightView.each()) {
 
-  for (auto [entity, material, mesh, transform] : view.each()) {
+    lights.push_back({transform.position, light.color, light.intensity});
+  }
+
+  auto &camTransform = world.get<TransformComponent>(activeCamera);
+
+  auto phongView =
+      world.view<PhongMaterial, MeshComponent, TransformComponent>();
+  for (auto [entity, material, mesh, transform] : phongView.each()) {
 
     MaterialBinder::bind(material, transform.modelMatrix, m_view, m_projection,
-                         transformComponent.position, lightComponent);
+                         camTransform.position, lights);
+
+    bindMesh(mesh);
+
+    drawMesh(mesh);
+  };
+
+  auto view = world.view<UnlitMaterial, MeshComponent, TransformComponent>();
+  for (auto [entity, material, mesh, transform] : view.each()) {
+
+    MaterialBinder::bind(material, transform.modelMatrix, m_view, m_projection);
 
     bindMesh(mesh);
 
     drawMesh(mesh);
   };
 }
-
-void Renderer::drawLights(entt::registry &world) {}

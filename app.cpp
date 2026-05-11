@@ -99,17 +99,14 @@ int main() {
   auto light = registry.create();
 
   registry.emplace<MeshComponent>(entity, squareMesh);
-  registry.emplace<MaterialComponent>(entity, squareMaterial);
+  registry.emplace<PhongMaterial>(entity, squareMaterial);
   auto &transform = registry.emplace<TransformComponent>(entity);
   transform.position = glm::vec3(0.f, 0.f, 3.0f);
 
   registry.emplace<MeshComponent>(light, squareMesh);
   registry.emplace<TransformComponent>(light, lightTransform);
-  registry.emplace<MaterialComponent>(light, lightMaterial);
-
-  registry.ctx().emplace<CameraComponent>();
-  registry.ctx().emplace<TransformComponent>();
-  registry.ctx().emplace<LightComponent>(lightComponent);
+  registry.emplace<UnlitMaterial>(light, lightMaterial);
+  registry.emplace<LightComponent>(light, lightComponent);
 
   engine.run();
 

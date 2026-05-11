@@ -18,7 +18,7 @@ public:
 
   static void windowSizeCallBack(GLFWwindow *window, int width, int height);
 
-  GLFWwindow *getWinow() { return window; };
+  GLFWwindow *getWindow() { return window; };
 
   bool windowShouldClose() { return glfwWindowShouldClose(window); }
 
@@ -27,6 +27,8 @@ public:
       glfwSetWindowShouldClose(window, true);
     }
   }
+
+  float getAspectRatio() { return (float)width / height; }
 
   ~Window();
 };

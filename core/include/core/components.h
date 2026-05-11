@@ -43,9 +43,7 @@ struct MaterialComponent {
 };
 
 struct LightComponent {
-  unsigned int shadowMap = 0;
   float intensity = 0;
-  float radius = 0;
   glm::vec3 color = glm::vec3(1.);
 };
 

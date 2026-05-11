@@ -1,7 +1,9 @@
 #pragma once
 
 #include <entt.hpp>
+#include <iostream>
 
+#include "core/components.h"
 #include "core/meshManager.h"
 #include "core/shaderManager.h"
 #include "core/textureManager.h"
@@ -31,7 +33,12 @@ public:
 
     Renderer::windowPtr = std::shared_ptr<Window>(windowPtr);
 
-    InputManager::init(windowPtr->getWinow());
+    InputManager::init(windowPtr->getWindow());
+
+    auto cam = getWorld().create();
+    getWorld().emplace<CameraComponent>(cam);
+    getWorld().emplace<TransformComponent>(cam);
+    Renderer::setActiveCamera(cam);
 
   }; // STARTS OPENGL PROFILE
 
@@ -43,25 +50,27 @@ public:
 
       // WINDOW LOGIC
       windowPtr->checkWindowShouldClose();
-
       // DELTA TIME
       float time = glfwGetTime();
       float dt = time - lastTime;
       lastTime = time;
 
       // CAMERA MAGIC
-      System::cameraInput(world.ctx().get<CameraComponent>(),
-                          world.ctx().get<TransformComponent>(), dt);
+      if (Renderer::activeCamera != entt::null) {
+        auto &cam = world.get<CameraComponent>(Renderer::activeCamera);
+        auto &camTransform =
+            world.get<TransformComponent>(Renderer::activeCamera);
 
-      System::moveCamera(world.ctx().get<CameraComponent>());
+        System::cameraInput(cam, camTransform, dt);
+
+        System::moveCamera(cam);
+      }
+
       System::updateTransforms(dt, world);
 
       Renderer::genMatrix(world);
-
       Renderer::BeginDraw();
-
       Renderer::drawMeshes(world);
-
       Renderer::EndDraw();
     }
   };

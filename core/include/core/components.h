@@ -12,13 +12,17 @@ struct TransformComponent {
   glm::vec3 scale = glm::vec3(1.0f);
 };
 
-struct PhongComponent {
+struct PhongMaterial {
   unsigned int shaderID = 0;
   unsigned int diffuseMap = 0;
   unsigned int specularMap = 0;
-  float shininess = 0;
-  glm::vec3 diffuseColor = glm::vec3(1.);
-  glm::vec3 specularColor = glm::vec3(1.);
+  float shininess = 32.f;
+  glm::vec3 ambientColor = glm::vec3(0.1);
+};
+
+struct UnlitMaterial {
+  unsigned int shaderID = 0;
+  glm::vec3 color = glm::vec3(1.f);
 };
 
 struct MeshComponent {

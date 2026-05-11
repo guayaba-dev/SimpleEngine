@@ -1,11 +1,10 @@
 #include "fwd.hpp"
-#include "gtc/type_ptr.hpp"
-#include <cmath>
 #include <core/pch.hpp>
 
 #include <memory>
 
 #include <core/components.h>
+#include <core/materialBinders.h>
 #include <core/renderer.h>
 #include <core/system.h>
 
@@ -29,11 +28,6 @@ void Renderer::genMatrix(entt::registry &world) {
 
 void Renderer::EndDraw() { glfwSwapBuffers(Renderer::windowPtr->getWinow()); }
 
-void bindMaterial(const MaterialComponent &material) {
-
-  glUseProgram(material.shaderID);
-}
-
 void bindMesh(const MeshComponent &mesh) {
   glBindVertexArray(mesh.vao);
   glBindBuffer(GL_ARRAY_BUFFER, mesh.vbo);
@@ -41,36 +35,6 @@ void bindMesh(const MeshComponent &mesh) {
   if (mesh.eao != 0) {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.eao);
   }
-}
-
-void bindLights(const LightComponent &light,
-                const MaterialComponent &material) {
-
-  glUniform3fv(glGetUniformLocation(material.shaderID, "lightPos"), 1,
-               glm::value_ptr(glm::vec3(0., 2., 1.)));
-
-  glUniform3fv(glGetUniformLocation(material.shaderID, "lightColor"), 1,
-               glm::value_ptr(light.color));
-}
-
-void bindUniform(const MaterialComponent &material,
-                 const glm::mat4 &modelMatrix) {
-
-  glUniformMatrix4fv(glGetUniformLocation(material.shaderID, "model"), 1,
-                     GL_FALSE, glm::value_ptr(modelMatrix));
-
-  glUniformMatrix4fv(glGetUniformLocation(material.shaderID, "view"), 1,
-                     GL_FALSE, glm::value_ptr(m_view));
-
-  glUniformMatrix4fv(glGetUniformLocation(material.shaderID, "projection"), 1,
-                     GL_FALSE, glm::value_ptr(m_projection));
-
-  glUniform3fv(glGetUniformLocation(material.shaderID, "ambientColor"), 1,
-               glm::value_ptr(material.ambientColor));
-
-  glActiveTexture(GL_TEXTURE0);
-  glUniform1i(glGetUniformLocation(material.shaderID, "texture1"), 0);
-  glBindTexture(GL_TEXTURE_2D, material.textureID);
 }
 
 void drawMesh(const MeshComponent &mesh) {
@@ -82,35 +46,21 @@ void drawMesh(const MeshComponent &mesh) {
   glDrawElements(GL_TRIANGLES, mesh.indexCount, GL_UNSIGNED_INT, (void *)0);
 }
 
-void drawEntity(const MaterialComponent &material, const glm::mat4 &modelMatrix,
-                const MeshComponent &mesh, const LightComponent &light,
-                const TransformComponent &camera) {
-
-  bindMaterial(material);
-
-  glUniform3fv(glGetUniformLocation(material.shaderID, "viewPos"), 1,
-               glm::value_ptr(camera.position));
-
-  bindLights(light, material);
-
-  bindUniform(material, modelMatrix);
-
-  bindMesh(mesh);
-
-  drawMesh(mesh);
-}
-
 void Renderer::drawMeshes(entt::registry &world) {
-
-  auto view =
-      world.view<MaterialComponent, MeshComponent, TransformComponent>();
 
   auto lightComponent = world.ctx().emplace<LightComponent>();
   auto &transformComponent = world.ctx().get<TransformComponent>();
 
+  auto view = world.view<PhongMaterial, MeshComponent, TransformComponent>();
+
   for (auto [entity, material, mesh, transform] : view.each()) {
-    drawEntity(material, transform.modelMatrix, mesh, lightComponent,
-               transformComponent);
+
+    MaterialBinder::bind(material, transform.modelMatrix, m_view, m_projection,
+                         transformComponent.position, lightComponent);
+
+    bindMesh(mesh);
+
+    drawMesh(mesh);
   };
 }
 

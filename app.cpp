@@ -77,15 +77,14 @@ int main() {
                                  squareMesh);
   squareMesh.vertexCount = vertexCount;
 
-  MaterialComponent squareMaterial;
+  PhongMaterial squareMaterial;
   squareMaterial.shaderID = Engine::shaderMag.loadShader(
       "PhongShading", "assets/phongLight.vert", "assets/phongLight.frag");
   squareMaterial.ambientColor = glm::vec3(0.6, 0.1, 0.2);
 
-  MaterialComponent lightMaterial;
+  UnlitMaterial lightMaterial;
   lightMaterial.shaderID = Engine::shaderMag.loadShader(
       "LightShader", "assets/basic.vert", "assets/basic.frag");
-  lightMaterial.ambientColor = glm::vec3(1.0);
 
   LightComponent lightComponent;
   lightComponent.color = glm::vec3(1., 1., 1.);

@@ -5,7 +5,7 @@
 
 namespace Renderer {
 
-extern std::shared_ptr<Window> windowPtr;
+extern std::weak_ptr<Window> windowPtr;
 extern entt::entity activeCamera;
 
 void BeginDraw();

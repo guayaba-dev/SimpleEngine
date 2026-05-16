@@ -12,7 +12,7 @@
 static glm::mat4 m_view = glm::mat4(1.f);
 static glm::mat4 m_projection = glm::mat4(1.f);
 
-std::shared_ptr<Window> Renderer::windowPtr = nullptr;
+std::weak_ptr<Window> Renderer::windowPtr;
 entt::entity Renderer::activeCamera = entt::null;
 
 void Renderer::setActiveCamera(entt::entity &cam) { activeCamera = cam; };
@@ -26,15 +26,28 @@ void Renderer::genMatrix(entt::registry &world) {
   if (activeCamera == entt::null)
     return;
 
+  std::shared_ptr<Window> spWindow = windowPtr.lock();
+
+  if (!spWindow)
+    return;
+
   auto &camera = world.get<CameraComponent>(activeCamera);
   auto &transform = world.get<TransformComponent>(activeCamera);
 
   m_view = System::getCameraView(camera, transform);
   m_projection =
-      System::getCameraProjection(camera, windowPtr->getAspectRatio());
+      System::getCameraProjection(camera, spWindow->getAspectRatio());
 }
 
-void Renderer::EndDraw() { glfwSwapBuffers(Renderer::windowPtr->getWindow()); }
+void Renderer::EndDraw() {
+
+  std::shared_ptr<Window> spWindow = windowPtr.lock();
+
+  if (!spWindow)
+    return;
+
+  glfwSwapBuffers(spWindow->getWindow());
+}
 
 void bindMesh(const MeshComponent &mesh) {
   glBindVertexArray(mesh.vao);

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <entt.hpp>
-#include <iostream>
 
 #include "core/components.h"
 #include "core/meshManager.h"

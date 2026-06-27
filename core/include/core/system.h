@@ -5,6 +5,16 @@
 
 namespace System {
 
+class ISystem {
+
+public:
+  virtual void on_start(entt::registry &world) = 0;
+
+  virtual void on_update(entt::registry &world, float dt) = 0;
+
+  virtual void on_stop(entt::registry &world) = 0;
+};
+
 void getModelMat(TransformComponent &transform);
 
 void moveCamera(CameraComponent &camera);

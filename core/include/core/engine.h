@@ -2,6 +2,7 @@
 
 #include <entt.hpp>
 
+#include "core/SystemManager.h"
 #include "core/components.h"
 #include "core/meshManager.h"
 #include "core/shaderManager.h"
@@ -23,6 +24,7 @@ public:
   static inline MeshManager meshMag{};
   static inline TextureManager texMag{};
   static inline ShaderManager shaderMag{};
+  static inline SystemManager systemManager{};
 
   entt::registry &getWorld() { return world; }
 
@@ -40,10 +42,15 @@ public:
     getWorld().get<CameraComponent>(cam).active = true;
     Renderer::setActiveCamera(cam);
 
+    systemManager.add_system(STAGE::POSTUPDATE,
+                             std::make_unique<System::CameraSystem>());
+
+    systemManager.add_system(STAGE::POSTUPDATE,
+                             std::make_unique<System::TransformSystem>());
+
   }; // STARTS OPENGL PROFILE
 
   void run() {
-
     float lastTime = glfwGetTime();
 
     while (!windowPtr->windowShouldClose()) {
@@ -55,18 +62,7 @@ public:
       float dt = time - lastTime;
       lastTime = time;
 
-      // CAMERA MAGIC
-      if (Renderer::activeCamera != entt::null) {
-        auto &cam = world.get<CameraComponent>(Renderer::activeCamera);
-        auto &camTransform =
-            world.get<TransformComponent>(Renderer::activeCamera);
-
-        System::cameraInput(cam, camTransform, dt);
-
-        System::moveCamera(cam);
-      }
-
-      System::updateTransforms(dt, world);
+      systemManager.update(getWorld(), dt);
 
       Renderer::genMatrix(world);
       Renderer::BeginDraw();

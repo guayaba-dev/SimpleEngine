@@ -5,9 +5,7 @@
 #include <core/system.h>
 
 namespace System {
-
 void CameraSystem::on_update(entt::registry &world, float dt) {
-
   auto camView = world.view<CameraComponent, TransformComponent>();
 
   for (auto [entt, cameraComp, transComp] : camView.each()) {
@@ -21,7 +19,7 @@ void CameraSystem::on_update(entt::registry &world, float dt) {
   }
 }
 
-void moveCamera(CameraComponent &camera) {
+void CameraSystem::moveCamera(CameraComponent &camera) {
 
   camera.yaw -= InputManager::deltaX;
   camera.pitch -= InputManager::deltaY;
@@ -31,6 +29,15 @@ void moveCamera(CameraComponent &camera) {
 
   InputManager::deltaX = 0;
   InputManager::deltaY = 0;
+}
+
+void TransformSystem::on_update(entt::registry &world, float dt) {
+
+  auto view = world.view<TransformComponent>();
+
+  for (auto [entity, transform] : view.each()) {
+    getModelMat(transform);
+  }
 }
 
 glm::mat4 getCameraView(CameraComponent &camera,
@@ -58,7 +65,7 @@ glm::mat4 getCameraProjection(CameraComponent &camera, float aspectRatio) {
   return perspective;
 }
 
-void getModelMat(TransformComponent &transform) {
+void TransformSystem::getModelMat(TransformComponent &transform) {
 
   glm::mat4 rotacion = glm::mat4(1.0f);
   rotacion =
@@ -76,27 +83,8 @@ void getModelMat(TransformComponent &transform) {
   transform.modelMatrix = model;
 }
 
-void updateCamera(float deltaTime, entt::registry &world) {
-
-  auto view = world.view<CameraComponent, TransformComponent>();
-
-  for (auto [entity, camera, transform] : view.each()) {
-
-    moveCamera(camera);
-  }
-}
-
-void updateTransforms(float deltaTime, entt::registry &world) {
-
-  auto view = world.view<TransformComponent>();
-
-  for (auto [entity, transform] : view.each()) {
-    getModelMat(transform);
-  }
-}
-
-void cameraInput(CameraComponent &camera, TransformComponent &transform,
-                 float dt) {
+void CameraSystem::cameraInput(CameraComponent &camera,
+                               TransformComponent &transform, float dt) {
 
   glm::vec3 right = glm::cross(camera.zDir, glm::vec3(0, 1, 0));
 

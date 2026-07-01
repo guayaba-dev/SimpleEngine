@@ -6,7 +6,7 @@
 using System::ISystem;
 
 void SystemManager::add_system(const STAGE stage,
-                               const std::unique_ptr<ISystem> system) {
+                               std::unique_ptr<ISystem> system) {
   systems[stage].push_back(std::move(system));
 }
 

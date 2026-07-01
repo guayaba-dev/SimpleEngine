@@ -8,35 +8,34 @@ namespace System {
 class ISystem {
 
 public:
-  virtual void on_start(entt::registry &world) = 0;
+  virtual ~ISystem() = default;
+
+  virtual void on_start(entt::registry &world) {};
 
   virtual void on_update(entt::registry &world, float dt) = 0;
 
-  virtual void on_stop(entt::registry &world) = 0;
+  virtual void on_stop(entt::registry &world) {};
 };
 
 class CameraSystem : public ISystem {
+  void cameraInput(CameraComponent &camera, TransformComponent &transform,
+                   float dt);
+  void moveCamera(CameraComponent &camera);
 
-  void on_start(entt::registry &world) override;
-
+public:
   void on_update(entt::registry &world, float dt) override;
-
-  void on_stop(entt::registry &world) override;
 };
 
-void getModelMat(TransformComponent &transform);
+class TransformSystem : public ISystem {
 
-void moveCamera(CameraComponent &camera);
+  void getModelMat(TransformComponent &transform);
 
-void cameraInput(CameraComponent &camera, TransformComponent &transform,
-                 float dt);
+public:
+  void on_update(entt::registry &world, float dt) override;
+};
 
 glm::mat4 getCameraView(CameraComponent &camera, TransformComponent &transform);
 
 glm::mat4 getCameraProjection(CameraComponent &camera, float aspectRatio);
-
-void updateTransforms(float deltaTime, entt::registry &world);
-
-void updateCamera(float deltaTime, entt::registry &world);
 
 } // namespace System

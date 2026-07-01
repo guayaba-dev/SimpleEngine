@@ -13,7 +13,7 @@ class SystemManager {
 public:
   SystemManager() = default;
 
-  void add_system(const STAGE stage, const std::unique_ptr<ISystem> system);
+  void add_system(const STAGE stage, std::unique_ptr<ISystem> system);
 
   void on_start(entt::registry &world);
   void update(entt::registry &world, float dt);

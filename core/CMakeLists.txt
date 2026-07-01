@@ -15,6 +15,7 @@ target_sources(core
         src/textureManager.cpp
         src/window.cpp
         src/system.cpp
+        src/SystemManager.cpp
       )
 
 target_precompile_headers(core 

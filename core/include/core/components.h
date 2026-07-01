@@ -53,6 +53,7 @@ struct CameraComponent {
   float farPlane = 100.0f;
   float yaw = 0.0;
   float pitch = 0.0;
+  bool active = false;
   glm::vec3 zDir = glm::vec3(0.0f);
   glm::vec3 up = glm::vec3(0.f, 1.f, 0.f);
 };

@@ -1,9 +1,25 @@
+#include "core/components.h"
 #include <core/pch.hpp>
 
 #include <core/inputManager.h>
 #include <core/system.h>
 
 namespace System {
+
+void CameraSystem::on_update(entt::registry &world, float dt) {
+
+  auto camView = world.view<CameraComponent, TransformComponent>();
+
+  for (auto [entt, cameraComp, transComp] : camView.each()) {
+
+    if (cameraComp.active != true)
+      continue;
+
+    cameraInput(cameraComp, transComp, dt);
+    moveCamera(cameraComp);
+    return;
+  }
+}
 
 void moveCamera(CameraComponent &camera) {
 

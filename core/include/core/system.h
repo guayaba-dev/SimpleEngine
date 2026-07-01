@@ -15,6 +15,15 @@ public:
   virtual void on_stop(entt::registry &world) = 0;
 };
 
+class CameraSystem : public ISystem {
+
+  void on_start(entt::registry &world) override;
+
+  void on_update(entt::registry &world, float dt) override;
+
+  void on_stop(entt::registry &world) override;
+};
+
 void getModelMat(TransformComponent &transform);
 
 void moveCamera(CameraComponent &camera);

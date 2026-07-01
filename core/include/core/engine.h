@@ -37,6 +37,7 @@ public:
     auto cam = getWorld().create();
     getWorld().emplace<CameraComponent>(cam);
     getWorld().emplace<TransformComponent>(cam);
+    getWorld().get<CameraComponent>(cam).active = true;
     Renderer::setActiveCamera(cam);
 
   }; // STARTS OPENGL PROFILE

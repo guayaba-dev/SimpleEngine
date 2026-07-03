@@ -1,17 +1,46 @@
 #pragma once
+#include "core/system.h"
 #include "window.h"
 #include <entt.hpp>
 #include <memory>
 
-namespace Renderer {
+class IRenderer {
 
-extern std::weak_ptr<Window> windowPtr;
-extern entt::entity activeCamera;
+public:
+  virtual void BeginDraw() = 0;
+  virtual void EndDraw() = 0;
+  virtual void drawMeshes(entt::registry &world) = 0;
+};
 
-void BeginDraw();
-void EndDraw();
+class OpenGLRenderer : public IRenderer {
 
-void genMatrix(entt::registry &world);
-void drawMeshes(entt::registry &world);
-void setActiveCamera(entt::entity &cam);
-} // namespace Renderer
+private:
+  glm::mat4 m_view = glm::mat4(1.f);
+  glm::mat4 m_projection = glm::mat4(1.f);
+
+  std::weak_ptr<Window> windowPtr;
+  entt::entity activeCamera;
+
+  void bindMesh(const MeshComponent &mesh);
+  void drawMesh(const MeshComponent &mesh);
+  void genMatrix(entt::registry &world);
+
+public:
+  explicit OpenGLRenderer(std::weak_ptr<Window> inWindowPtr)
+      : windowPtr(inWindowPtr) {}
+
+  void BeginDraw() override;
+  void EndDraw() override;
+  void drawMeshes(entt::registry &world) override;
+};
+
+class RenderSystem : public System::ISystem {
+
+  std::unique_ptr<IRenderer> renderer;
+
+public:
+  RenderSystem(std::shared_ptr<Window> windowPtr)
+      : renderer(std::make_unique<OpenGLRenderer>(windowPtr)) {};
+
+  void on_update(entt::registry &world, float dt) override;
+};

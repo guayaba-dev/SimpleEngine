@@ -1,19 +1,26 @@
 #include "core/pch.hpp"
 #include "core/system.h"
 #include <core/SystemManager.h>
+#include <iostream>
 #include <memory>
+#include <string>
 
 using System::ISystem;
 
 void SystemManager::add_system(const STAGE stage,
                                std::unique_ptr<ISystem> system) {
+
+  std::cerr << "[ADD_SYSTEM] Stage: " << static_cast<int>(stage)
+            << ", System ptr: " << system.get()
+            << ", System type: " << typeid(*system).name() << std::endl;
+
   systems[stage].push_back(std::move(system));
 }
 
 void SystemManager::on_start(entt::registry &world) {
 
   for (STAGE s : {STAGE::INPUT, STAGE::POSTUPDATE, STAGE::PREUPDATE,
-                  STAGE::POSTUPDATE, STAGE::RENDER}) {
+                  STAGE::UPDATE, STAGE::POSTUPDATE, STAGE::RENDER}) {
 
     for (auto &sys : systems[s]) {
       sys->on_start(world);
@@ -24,9 +31,10 @@ void SystemManager::on_start(entt::registry &world) {
 void SystemManager::update(entt::registry &world, float dt) {
 
   for (STAGE s : {STAGE::INPUT, STAGE::POSTUPDATE, STAGE::PREUPDATE,
-                  STAGE::POSTUPDATE, STAGE::RENDER}) {
+                  STAGE::UPDATE, STAGE::POSTUPDATE, STAGE::RENDER}) {
 
     for (auto &sys : systems[s]) {
+
       sys->on_update(world, dt);
     }
   }
@@ -35,7 +43,7 @@ void SystemManager::update(entt::registry &world, float dt) {
 void SystemManager::on_stop(entt::registry &world) {
 
   for (STAGE s : {STAGE::INPUT, STAGE::POSTUPDATE, STAGE::PREUPDATE,
-                  STAGE::POSTUPDATE, STAGE::RENDER}) {
+                  STAGE::UPDATE, STAGE::POSTUPDATE, STAGE::RENDER}) {
 
     for (auto &sys : systems[s]) {
       sys->on_stop(world);

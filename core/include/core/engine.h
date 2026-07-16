@@ -21,10 +21,10 @@ class Engine {
   std::shared_ptr<Window> windowPtr;
 
 public:
-  static inline MeshManager meshMag{};
-  static inline TextureManager texMag{};
-  static inline ShaderManager shaderMag{};
-  static inline SystemManager systemManager{};
+  MeshManager meshMag{};
+  TextureManager texMag{};
+  ShaderManager shaderMag{};
+  SystemManager systemManager{};
 
   entt::registry &getWorld() { return world; }
 
@@ -39,7 +39,7 @@ public:
     getWorld().emplace<TransformComponent>(cam);
     getWorld().get<CameraComponent>(cam).active = true;
 
-    systemManager.add_system(STAGE::POSTUPDATE,
+    systemManager.add_system(STAGE::UPDATE,
                              std::make_unique<System::CameraSystem>());
 
     systemManager.add_system(STAGE::POSTUPDATE,

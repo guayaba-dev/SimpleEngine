@@ -1,13 +1,18 @@
 
+#include "core/SystemManager.h"
+#include "core/inputManager.h"
 #include "core/meshManager.h"
+#include "core/system.h"
 #include "detail/qualifier.hpp"
 #include "fwd.hpp"
+#include <GLFW/glfw3.h>
 #include <core/pch.hpp>
 
 #include <core/components.h>
 #include <core/engine.h>
 
 #include <iostream>
+#include <memory>
 #include <string>
 
 float square[] = {
@@ -53,6 +58,31 @@ float cubeVertex[] = {
 int vertexSize = sizeof(cubeVertex);
 int vertexCount = vertexSize / (sizeof(float) * 6);
 
+class MovingLightSys : public System::ISystem {
+
+  float t = 0.0;
+  float r = 5.0;
+
+public:
+  void on_update(entt::registry &world, float dt) override {
+
+    if (InputManager::isKeyDown(GLFW_KEY_UP))
+      r += 1.0 * dt;
+    else if (InputManager::isKeyDown(GLFW_KEY_DOWN))
+      r -= 1.0 * dt;
+
+    auto view = world.view<LightComponent, TransformComponent>();
+
+    t += dt;
+
+    for (auto [entity, light, transform] : view.each()) {
+
+      transform.position =
+          glm::vec3(r * glm::sin(t), r * glm::sin(t), r * glm::cos(t) + 3.0);
+    }
+  }
+};
+
 int main() {
 
   std::cerr << "vertexSize: " << vertexSize << '\n';
@@ -71,19 +101,21 @@ int main() {
       "basicShader", "assets/basic.vert", "assets/basic.frag");
   squareMaterial.textureID = Engine::texMag.loadTexture("assets/container.jpg");
 */
+  engine.systemManager.add_system(STAGE::UPDATE,
+                                  std::make_unique<MovingLightSys>());
 
   MeshComponent squareMesh;
-  Engine::meshMag.loadNormalMesh("cubeVertex", cubeVertex, vertexSize,
-                                 squareMesh);
+  engine.meshMag.loadNormalMesh("cubeVertex", cubeVertex, vertexSize,
+                                squareMesh);
   squareMesh.vertexCount = vertexCount;
 
   PhongMaterial squareMaterial;
-  squareMaterial.shaderID = Engine::shaderMag.loadShader(
+  squareMaterial.shaderID = engine.shaderMag.loadShader(
       "PhongShading", "assets/phongLight.vert", "assets/phongLight.frag");
   squareMaterial.ambientColor = glm::vec3(0.6, 0.1, 0.2);
 
   UnlitMaterial lightMaterial;
-  lightMaterial.shaderID = Engine::shaderMag.loadShader(
+  lightMaterial.shaderID = engine.shaderMag.loadShader(
       "LightShader", "assets/basic.vert", "assets/basic.frag");
 
   LightComponent lightComponent;

@@ -36,11 +36,10 @@ public:
 
 class RenderSystem : public System::ISystem {
 
-  std::unique_ptr<IRenderer> renderer;
+  std::shared_ptr<IRenderer> renderer;
 
 public:
-  RenderSystem(std::shared_ptr<Window> windowPtr)
-      : renderer(std::make_unique<OpenGLRenderer>(windowPtr)) {};
+  RenderSystem(std::shared_ptr<IRenderer> renderer) : renderer(renderer) {};
 
   void on_update(entt::registry &world, float dt) override;
 };

@@ -3,7 +3,6 @@
 #include <core/SystemManager.h>
 #include <iostream>
 #include <memory>
-#include <string>
 
 using System::ISystem;
 
@@ -31,7 +30,7 @@ void SystemManager::on_start(entt::registry &world) {
 void SystemManager::update(entt::registry &world, float dt) {
 
   for (STAGE s : {STAGE::INPUT, STAGE::POSTUPDATE, STAGE::PREUPDATE,
-                  STAGE::UPDATE, STAGE::POSTUPDATE, STAGE::RENDER}) {
+                  STAGE::UPDATE, STAGE::POSTUPDATE}) {
 
     for (auto &sys : systems[s]) {
 
@@ -49,4 +48,10 @@ void SystemManager::on_stop(entt::registry &world) {
       sys->on_stop(world);
     }
   }
+}
+
+void SystemManager::render(entt::registry &world, float dt) {
+
+  for (auto &sys : systems[STAGE::RENDER])
+    sys->on_update(world, dt);
 }

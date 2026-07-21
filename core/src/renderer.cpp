@@ -1,6 +1,5 @@
 #include <core/pch.hpp>
 
-#include <iostream>
 #include <memory>
 
 #include <core/components.h>
@@ -33,9 +32,7 @@ void OpenGLRenderer::drawMesh(const MeshComponent &mesh) {
 // CLASS
 
 void RenderSystem::on_update(entt::registry &world, float dt) {
-  renderer->BeginDraw();
   renderer->drawMeshes(world);
-  renderer->EndDraw();
 }
 
 // OPENGL RENDERER

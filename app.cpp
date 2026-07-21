@@ -15,6 +15,8 @@
 #include <memory>
 #include <string>
 
+#include "app/imguiImp.h"
+
 float square[] = {
     -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, // bottom left
     -0.5f, 0.5f,  0.0f, 0.0f, 1.0f, // top left
@@ -89,7 +91,14 @@ int main() {
   std::cerr << "vertexCount: " << vertexCount << '\n';
 
   Engine engine = Engine();
+
+  engine.systemManager.add_system(STAGE::UPDATE,
+                                  std::make_unique<MovingLightSys>());
+
   engine.start();
+
+  engine.systemManager.add_system(
+      STAGE::RENDER, std::make_unique<ImGuiSystem>(engine.getWindow()));
 
   /*
   Engine::meshMag.loadMesh("square", square, sizeof(square), squareMesh.vao,
@@ -101,8 +110,6 @@ int main() {
       "basicShader", "assets/basic.vert", "assets/basic.frag");
   squareMaterial.textureID = Engine::texMag.loadTexture("assets/container.jpg");
 */
-  engine.systemManager.add_system(STAGE::UPDATE,
-                                  std::make_unique<MovingLightSys>());
 
   MeshComponent squareMesh;
   engine.meshMag.loadNormalMesh("cubeVertex", cubeVertex, vertexSize,

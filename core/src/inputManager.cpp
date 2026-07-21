@@ -1,4 +1,6 @@
+#include <GLFW/glfw3.h>
 #include <core/inputManager.h>
+#include <iostream>
 
 #include <core/pch.hpp>
 
@@ -18,7 +20,20 @@ void KeyCallback(GLFWwindow *window, int key, int scancode, int action,
     keys[key] = action != GLFW_RELEASE;
 }
 
-void mouseCallback(GLFWwindow *, double xPos, double yPos) {
+void toggleInputMode(GLFWwindow *window) {
+  if (glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_NORMAL) {
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    return;
+  }
+
+  glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+}
+
+void mouseCallback(GLFWwindow *window, double xPos, double yPos) {
+  if (glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_NORMAL)
+    return;
+
   if (firstMouse) {
     mouseX = xPos;
     mouseY = yPos;

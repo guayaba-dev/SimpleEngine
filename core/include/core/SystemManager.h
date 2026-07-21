@@ -17,6 +17,7 @@ public:
 
   void on_start(entt::registry &world);
   void update(entt::registry &world, float dt);
+  void render(entt::registry &world, float dt);
   void on_stop(entt::registry &world);
 
 private:

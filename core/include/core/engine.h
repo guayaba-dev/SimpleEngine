@@ -20,21 +20,25 @@ class Engine {
 
   std::shared_ptr<Window> windowPtr;
 
+  std::shared_ptr<IRenderer> renderer;
+
 public:
   MeshManager meshMag{};
   TextureManager texMag{};
   ShaderManager shaderMag{};
   SystemManager systemManager{};
-
   entt::registry &getWorld() { return world; }
+  std::shared_ptr<Window> getWindow() { return windowPtr; };
+
+  Engine() {
+    windowPtr = std::make_shared<Window>();
+    InputManager::init(windowPtr->getWindow());
+    renderer = std::make_shared<OpenGLRenderer>(windowPtr);
+  }
 
   void start() {
-
-    windowPtr = std::make_shared<Window>();
-
-    InputManager::init(windowPtr->getWindow());
-
     auto cam = getWorld().create();
+
     getWorld().emplace<CameraComponent>(cam);
     getWorld().emplace<TransformComponent>(cam);
     getWorld().get<CameraComponent>(cam).active = true;
@@ -46,7 +50,9 @@ public:
                              std::make_unique<System::TransformSystem>());
 
     systemManager.add_system(STAGE::RENDER,
-                             std::make_unique<RenderSystem>(windowPtr));
+                             std::make_unique<RenderSystem>(renderer));
+
+    systemManager.on_start(world);
 
   }; // STARTS OPENGL PROFILE
 
@@ -63,8 +69,12 @@ public:
       lastTime = time;
 
       systemManager.update(getWorld(), dt);
+
+      renderer->BeginDraw();
+      systemManager.render(getWorld(), dt);
+      renderer->EndDraw();
     }
   };
 
-  void shutDown() {}; // SHUTS DOWN ENGINE
+  void shutDown() { systemManager.on_stop(world); }; // SHUTS DOWN ENGINE
 };

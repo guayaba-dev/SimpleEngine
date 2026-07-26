@@ -1,4 +1,5 @@
 #include "core/inputManager.h"
+#include "detail/qualifier.hpp"
 #include <core/system.h>
 #include <core/window.h>
 #include <imgui.h>
@@ -9,6 +10,7 @@
 class ImGuiSystem : public System::ISystem {
 
 public:
+  float newShineVal = 0.0;
   ImGuiSystem(std::shared_ptr<Window> windowPtr) {
     window = windowPtr;
     IMGUI_CHECKVERSION();
@@ -29,12 +31,11 @@ public:
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-    ImGui::ShowDemoWindow();
+    auto matView = world.view<PhongMaterial>();
 
-    /*
-        std::cerr << "DisplaySize: " << ImGui::GetIO().DisplaySize.x << ", "
-                  << ImGui::GetIO().DisplaySize.y << "\n";
-    */
+    for (auto [entity, PhongMaterial] : matView.each()) {
+      ImGui::SliderFloat("shininess", &PhongMaterial.shininess, 0.0, 120.0);
+    }
 
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

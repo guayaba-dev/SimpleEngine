@@ -16,7 +16,7 @@ struct PhongMaterial {
   unsigned int shaderID = 0;
   unsigned int diffuseMap = 0;
   unsigned int specularMap = 0;
-  float shininess = 32.f;
+  float shininess = 32.0;
   glm::vec3 ambientColor = glm::vec3(0.1);
 };
 

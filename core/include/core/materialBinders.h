@@ -42,7 +42,8 @@ inline void bind(const PhongMaterial &mat, const glm::mat4 &model,
   // Material
   glUniform3fv(glGetUniformLocation(mat.shaderID, "ambientColor"), 1,
                glm::value_ptr(mat.ambientColor));
-  glUniform1f(glGetUniformLocation(mat.shaderID, "shininess"), mat.shininess);
+  glUniform1f(glGetUniformLocation(mat.shaderID, "specularStrength"),
+              mat.shininess);
 
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, mat.diffuseMap);

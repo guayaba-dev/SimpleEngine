@@ -77,10 +77,15 @@ public:
 
     t += dt;
 
+    int index = 0;
+
     for (auto [entity, light, transform] : view.each()) {
 
-      transform.position =
-          glm::vec3(r * glm::sin(t), r * glm::sin(t), r * glm::cos(t) + 3.0);
+      transform.position = glm::vec3(r * glm::sin(t + index * 180.f),
+                                     r * glm::sin(t + index * 180.f),
+                                     r * glm::cos(t + index * 180.f) + 3.0);
+
+      index++;
     }
   }
 };
@@ -94,11 +99,6 @@ int main() {
 
   engine.systemManager.add_system(STAGE::UPDATE,
                                   std::make_unique<MovingLightSys>());
-
-  engine.start();
-
-  engine.systemManager.add_system(
-      STAGE::RENDER, std::make_unique<ImGuiSystem>(engine.getWindow()));
 
   /*
   Engine::meshMag.loadMesh("square", square, sizeof(square), squareMesh.vao,
@@ -136,6 +136,7 @@ int main() {
 
   auto entity = registry.create();
   auto light = registry.create();
+  auto light1 = registry.create();
 
   registry.emplace<Shader>(entity, squreShader);
   registry.emplace<MeshComponent>(entity, squareMesh);
@@ -148,6 +149,17 @@ int main() {
   registry.emplace<MeshComponent>(light, squareMesh);
   registry.emplace<TransformComponent>(light, lightTransform);
   registry.emplace<LightComponent>(light, lightComponent);
+
+  registry.emplace<Shader>(light1, lightMaterial);
+  registry.emplace<UnlitMaterial>(light1);
+  registry.emplace<MeshComponent>(light1, squareMesh);
+  registry.emplace<TransformComponent>(light1, lightTransform);
+  registry.emplace<LightComponent>(light1, lightComponent);
+
+  engine.start();
+
+  engine.systemManager.add_system(
+      STAGE::RENDER, std::make_unique<ImGuiSystem>(engine.getWindow()));
 
   engine.run();
 

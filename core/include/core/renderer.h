@@ -25,7 +25,8 @@ private:
 
   void bindMesh(const MeshComponent &mesh);
   void drawMesh(const MeshComponent &mesh);
-  void genMatrix(entt::registry &world);
+  void genContext(entt::registry &world);
+  void uploadUniformBuffer(entt::registry &world);
 
 public:
   explicit OpenGLRenderer(std::weak_ptr<Window> inWindowPtr,
@@ -43,6 +44,8 @@ class RenderSystem : public System::ISystem {
 
 public:
   RenderSystem(std::shared_ptr<IRenderer> renderer) : renderer(renderer) {};
+
+  void on_start(entt::registry &world) override;
 
   void on_update(entt::registry &world, float dt) override;
 };

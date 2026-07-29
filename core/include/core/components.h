@@ -48,19 +48,19 @@ struct LightComponent {
   glm::vec3 color = glm::vec3(1.0f);
 };
 
-struct lightData {
-  glm::vec3 position;
-  glm::vec3 color;
-  float intensity;
+struct GPULight { // DATA SENDED TO THE GPU
+  glm::vec4 position;
+  glm::vec4 color;
 };
 
 struct FrameContext {
+  unsigned int uboLights;
+  float time = 0.0f;
+  float deltaTime = 0.0f;
   glm::mat4 viewMat = glm::mat4(1.0);
   glm::mat4 projMat = glm::mat4(1.0);
   glm::vec3 camPos = glm::vec3(1.0);
-  float time = 0.0f;
-  float deltaTime = 0.0f;
-  std::vector<lightData> lights;
+  std::vector<GPULight> lights;
 };
 
 struct CameraComponent {

@@ -1,4 +1,5 @@
-#include "core/materialHandellers.h"
+#include "ext/vector_float4.hpp"
+#include <algorithm>
 #include <core/pch.hpp>
 
 #include <iostream>
@@ -11,6 +12,11 @@
 #include <vector>
 
 // DRAW UTILS
+struct lightBlockData {
+  int numLights = 0;   // 4 bytes
+  int _pad[3];         // 12 bytes completes offset of 16bytes
+  GPULight lights[16]; // 16 base * 16
+};
 
 void OpenGLRenderer::bindMesh(const MeshComponent &mesh) {
   glBindVertexArray(mesh.vao);
@@ -32,6 +38,24 @@ void OpenGLRenderer::drawMesh(const MeshComponent &mesh) {
 }
 
 // CLASS
+void RenderSystem::on_start(entt::registry &world) {
+  auto &frameContext = world.ctx().get<FrameContext>();
+
+  glGenBuffers(1, &frameContext.uboLights);
+  glBindBuffer(GL_UNIFORM_BUFFER, frameContext.uboLights);
+  glBufferData(GL_UNIFORM_BUFFER, sizeof(lightBlockData), NULL, GL_STATIC_DRAW);
+  glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+  glBindBufferBase(GL_UNIFORM_BUFFER, 0, frameContext.uboLights);
+
+  auto shaderView = world.view<Shader>();
+
+  for (auto [entt, shader] : shaderView.each()) {
+    glUniformBlockBinding(shader.shaderID,
+                          glGetUniformBlockIndex(shader.shaderID, "LightBlock"),
+                          0);
+  }
+};
 
 void RenderSystem::on_update(entt::registry &world, float dt) {
   renderer->drawWorld(world);
@@ -44,7 +68,7 @@ void OpenGLRenderer::BeginDraw() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 };
 
-void OpenGLRenderer::genMatrix(entt::registry &world) {
+void OpenGLRenderer::genContext(entt::registry &world) {
   auto &frameContext = world.ctx().get<FrameContext>();
 
   auto camView = world.view<CameraComponent>();
@@ -63,10 +87,11 @@ void OpenGLRenderer::genMatrix(entt::registry &world) {
   auto &camera = world.get<CameraComponent>(activeCamera);
   auto &transform = world.get<TransformComponent>(activeCamera);
 
-  std::vector<lightData> lights;
+  std::vector<GPULight> lights;
   auto lightView = world.view<LightComponent, TransformComponent>();
   for (auto [entity, light, transform] : lightView.each()) {
-    lights.push_back({transform.position, light.color, light.intensity});
+    lights.push_back(
+        {glm::vec4(transform.position, 1.0f), glm::vec4(light.color, 1.0f)});
   }
 
   m_view = System::getCameraView(camera, transform);
@@ -76,6 +101,22 @@ void OpenGLRenderer::genMatrix(entt::registry &world) {
   frameContext.projMat = m_projection;
   frameContext.camPos = transform.position;
   frameContext.lights = lights;
+}
+
+void OpenGLRenderer::uploadUniformBuffer(entt::registry &world) {
+  auto &frameContext = world.ctx().get<FrameContext>();
+
+  lightBlockData data{};
+
+  data.numLights = std::min((int)frameContext.lights.size(), 16);
+
+  for (int i = 0; i < data.numLights; i++) {
+    data.lights[i] = frameContext.lights[i];
+  }
+
+  glBindBuffer(GL_UNIFORM_BUFFER, frameContext.uboLights);
+  glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(lightBlockData), &data);
+  glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
 void OpenGLRenderer::EndDraw() {
@@ -89,7 +130,8 @@ void OpenGLRenderer::EndDraw() {
 }
 
 void OpenGLRenderer::drawWorld(entt::registry &world) {
-  genMatrix(world);
+  genContext(world);
+  uploadUniformBuffer(world);
   unsigned int lastShader = 0xFFFFFFF;
 
   world.sort<Shader>([](const Shader &lhs, const Shader &rhs) {
@@ -109,6 +151,4 @@ void OpenGLRenderer::drawWorld(entt::registry &world) {
     bindMesh(mesh);
     drawMesh(mesh);
   }
-
-  ;
 };

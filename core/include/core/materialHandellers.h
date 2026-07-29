@@ -38,17 +38,6 @@ public:
 
     glUniformMatrix4fv(glGetUniformLocation(shaderID, "projection"), 1,
                        GL_FALSE, glm::value_ptr(matCtx.projMat));
-
-    // LIGHT
-    if (!matCtx.lights.empty()) {
-
-      glUniform3fv(glGetUniformLocation(shaderID, "lightPos"), 1,
-                   glm::value_ptr(matCtx.lights[0].position));
-      glUniform3fv(glGetUniformLocation(shaderID, "lightColor"), 1,
-                   glm::value_ptr(matCtx.lights[0].color));
-      glUniform1f(glGetUniformLocation(shaderID, "lightIntesity"),
-                  matCtx.lights[0].intensity);
-    }
   }
 
   void bind_object(entt::entity entity, entt::registry &world,

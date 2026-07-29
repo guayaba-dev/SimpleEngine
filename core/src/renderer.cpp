@@ -1,5 +1,7 @@
+#include "core/materialHandellers.h"
 #include <core/pch.hpp>
 
+#include <iostream>
 #include <memory>
 
 #include <core/components.h>
@@ -32,7 +34,7 @@ void OpenGLRenderer::drawMesh(const MeshComponent &mesh) {
 // CLASS
 
 void RenderSystem::on_update(entt::registry &world, float dt) {
-  renderer->drawMeshes(world);
+  renderer->drawWorld(world);
 }
 
 // OPENGL RENDERER
@@ -43,8 +45,15 @@ void OpenGLRenderer::BeginDraw() {
 };
 
 void OpenGLRenderer::genMatrix(entt::registry &world) {
-  if (activeCamera == entt::null)
+  auto &frameContext = world.ctx().get<FrameContext>();
+
+  auto camView = world.view<CameraComponent>();
+
+  activeCamera = *camView.begin();
+
+  if (activeCamera == entt::null) {
     return;
+  }
 
   std::shared_ptr<Window> spWindow = windowPtr.lock();
 
@@ -54,9 +63,19 @@ void OpenGLRenderer::genMatrix(entt::registry &world) {
   auto &camera = world.get<CameraComponent>(activeCamera);
   auto &transform = world.get<TransformComponent>(activeCamera);
 
+  std::vector<lightData> lights;
+  auto lightView = world.view<LightComponent, TransformComponent>();
+  for (auto [entity, light, transform] : lightView.each()) {
+    lights.push_back({transform.position, light.color, light.intensity});
+  }
+
   m_view = System::getCameraView(camera, transform);
   m_projection =
       System::getCameraProjection(camera, spWindow->getAspectRatio());
+  frameContext.viewMat = m_view;
+  frameContext.projMat = m_projection;
+  frameContext.camPos = transform.position;
+  frameContext.lights = lights;
 }
 
 void OpenGLRenderer::EndDraw() {
@@ -69,44 +88,27 @@ void OpenGLRenderer::EndDraw() {
   glfwSwapBuffers(spWindow->getWindow());
 }
 
-void OpenGLRenderer::drawMeshes(entt::registry &world) {
-  auto camView = world.view<CameraComponent>();
-  if (camView.empty())
-    return;
-
-  activeCamera = *camView.begin();
-
-  if (activeCamera == entt::null)
-    return;
-
+void OpenGLRenderer::drawWorld(entt::registry &world) {
   genMatrix(world);
+  unsigned int lastShader = 0xFFFFFFF;
 
-  std::vector<MaterialBinder::lightData> lights;
-  auto lightView = world.view<LightComponent, TransformComponent>();
-  for (auto [entity, light, transform] : lightView.each())
-    lights.push_back({transform.position, light.color, light.intensity});
+  world.sort<Shader>([](const Shader &lhs, const Shader &rhs) {
+    return lhs.shaderID < rhs.shaderID;
+  });
+  auto sortedView = world.view<Shader, MeshComponent>();
 
-  auto &camTransform = world.get<TransformComponent>(activeCamera);
+  for (auto [entity, shader, mesh] : sortedView.each()) {
 
-  auto phongView =
-      world.view<PhongMaterial, MeshComponent, TransformComponent>();
-  for (auto [entity, material, mesh, transform] : phongView.each()) {
+    if (shader.shaderID != lastShader) {
+      glUseProgram(shader.shaderID);
+      materialManager->bind_FrameContex(world, shader.shaderID);
+      lastShader = shader.shaderID;
+    }
 
-    MaterialBinder::bind(material, transform.modelMatrix, m_view, m_projection,
-                         camTransform.position, lights);
-
+    materialManager->bind(entity, world, shader.shaderID);
     bindMesh(mesh);
-
     drawMesh(mesh);
-  };
+  }
 
-  auto view = world.view<UnlitMaterial, MeshComponent, TransformComponent>();
-  for (auto [entity, material, mesh, transform] : view.each()) {
-
-    MaterialBinder::bind(material, transform.modelMatrix, m_view, m_projection);
-
-    bindMesh(mesh);
-
-    drawMesh(mesh);
-  };
-}
+  ;
+};

@@ -4,6 +4,8 @@
 
 #include "core/SystemManager.h"
 #include "core/components.h"
+#include "core/materialBinders.h"
+#include "core/materialHandellers.h"
 #include "core/meshManager.h"
 #include "core/shaderManager.h"
 #include "core/textureManager.h"
@@ -27,13 +29,16 @@ public:
   TextureManager texMag{};
   ShaderManager shaderMag{};
   SystemManager systemManager{};
+  std::shared_ptr<MaterialManager> materialManager;
   entt::registry &getWorld() { return world; }
   std::shared_ptr<Window> getWindow() { return windowPtr; };
 
   Engine() {
     windowPtr = std::make_shared<Window>();
     InputManager::init(windowPtr->getWindow());
-    renderer = std::make_shared<OpenGLRenderer>(windowPtr);
+    materialManager = std::make_shared<MaterialManager>();
+    renderer = std::make_shared<OpenGLRenderer>(windowPtr, materialManager);
+    world.ctx().emplace<FrameContext>();
   }
 
   void start() {
@@ -54,6 +59,8 @@ public:
 
     systemManager.on_start(world);
 
+    materialManager->addMaterialBinder(std::make_unique<PhongBinder>());
+    materialManager->addMaterialBinder(std::make_unique<UnlitBinder>());
   }; // STARTS OPENGL PROFILE
 
   void run() {

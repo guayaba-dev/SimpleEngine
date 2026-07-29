@@ -116,18 +116,18 @@ int main() {
                                 squareMesh);
   squareMesh.vertexCount = vertexCount;
 
-  PhongMaterial squareMaterial;
-  squareMaterial.shaderID = engine.shaderMag.loadShader(
+  Shader squreShader;
+  squreShader.shaderID = engine.shaderMag.loadShader(
       "PhongShading", "assets/phongLight.vert", "assets/phongLight.frag");
+
+  PhongMaterial squareMaterial;
   squareMaterial.ambientColor = glm::vec3(0.6, 0.1, 0.2);
 
-  UnlitMaterial lightMaterial;
+  Shader lightMaterial;
   lightMaterial.shaderID = engine.shaderMag.loadShader(
       "LightShader", "assets/basic.vert", "assets/basic.frag");
 
   LightComponent lightComponent;
-  lightComponent.color = glm::vec3(1., 1., 1.);
-  lightComponent.intensity = 0.6;
 
   TransformComponent lightTransform;
   lightTransform.position = glm::vec3(4., 4., 1.);
@@ -137,14 +137,16 @@ int main() {
   auto entity = registry.create();
   auto light = registry.create();
 
+  registry.emplace<Shader>(entity, squreShader);
   registry.emplace<MeshComponent>(entity, squareMesh);
   registry.emplace<PhongMaterial>(entity, squareMaterial);
   auto &transform = registry.emplace<TransformComponent>(entity);
   transform.position = glm::vec3(0.f, 0.f, 3.0f);
 
+  registry.emplace<Shader>(light, lightMaterial);
+  registry.emplace<UnlitMaterial>(light);
   registry.emplace<MeshComponent>(light, squareMesh);
   registry.emplace<TransformComponent>(light, lightTransform);
-  registry.emplace<UnlitMaterial>(light, lightMaterial);
   registry.emplace<LightComponent>(light, lightComponent);
 
   engine.run();

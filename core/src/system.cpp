@@ -1,6 +1,7 @@
 #include "core/components.h"
 #include <core/pch.hpp>
 
+#include <core/components.h>
 #include <core/inputManager.h>
 #include <core/system.h>
 

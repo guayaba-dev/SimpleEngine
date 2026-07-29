@@ -10,7 +10,6 @@ target_sources(core
         src/inputManager.cpp
         src/meshManager.cpp
         src/renderer.cpp
-        src/shader.cpp
         src/shaderManager.cpp
         src/textureManager.cpp
         src/window.cpp

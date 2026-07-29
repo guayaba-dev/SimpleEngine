@@ -1,9 +1,8 @@
 #pragma once
 
 #include "detail/qualifier.hpp"
-#include "ext/matrix_float4x4.hpp"
-#include "ext/vector_float3.hpp"
 #include <core/pch.hpp>
+#include <vector>
 
 struct TransformComponent {
   glm::mat4 modelMatrix = glm::mat4(1.0);
@@ -12,8 +11,11 @@ struct TransformComponent {
   glm::vec3 scale = glm::vec3(1.0f);
 };
 
-struct PhongMaterial {
+struct Shader {
   unsigned int shaderID = 0;
+};
+
+struct PhongMaterial {
   unsigned int diffuseMap = 0;
   unsigned int specularMap = 0;
   float shininess = 32.0;
@@ -21,7 +23,6 @@ struct PhongMaterial {
 };
 
 struct UnlitMaterial {
-  unsigned int shaderID = 0;
   glm::vec3 color = glm::vec3(1.f);
 };
 
@@ -39,12 +40,27 @@ struct MaterialComponent {
   unsigned int specularTexuture = 0;
   unsigned int textureID = 0;
   float shininess = 0;
-  glm::vec3 ambientColor = glm::vec3(0);
+  glm::vec3 ambientColor = glm::vec3(0.0f);
 };
 
 struct LightComponent {
-  float intensity = 0;
-  glm::vec3 color = glm::vec3(1.);
+  float intensity = 0.0f;
+  glm::vec3 color = glm::vec3(1.0f);
+};
+
+struct lightData {
+  glm::vec3 position;
+  glm::vec3 color;
+  float intensity;
+};
+
+struct FrameContext {
+  glm::mat4 viewMat = glm::mat4(1.0);
+  glm::mat4 projMat = glm::mat4(1.0);
+  glm::vec3 camPos = glm::vec3(1.0);
+  float time = 0.0f;
+  float deltaTime = 0.0f;
+  std::vector<lightData> lights;
 };
 
 struct CameraComponent {

@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.16)
 
 project(GameEngine)
 
+option(BUILD_EXAMPLES "Build example application (app.cpp)" ON)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -27,18 +29,19 @@ add_subdirectory(core)
 add_subdirectory(vendor)
 
 
-# OpenGL + GLFW
+if(BUILD_EXAMPLES)
+  # App executable
+  add_executable(${PROJECT_NAME}_app app.cpp)
 
-# App executable
-add_executable(${PROJECT_NAME}_app app.cpp)
-
-target_link_libraries(
+  # OpenGL + GLFW
+  target_link_libraries(
     ${PROJECT_NAME}_app
     PUBLIC 
         vendor
         core
         GL
         glfw
-)
+  )
 
-target_precompile_headers(${PROJECT_NAME}_app REUSE_FROM core)
+  target_precompile_headers(${PROJECT_NAME}_app REUSE_FROM core)
+endif()

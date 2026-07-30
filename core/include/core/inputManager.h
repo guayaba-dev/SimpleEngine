@@ -1,7 +1,5 @@
 #pragma once
 
-#include "pch.hpp"
-
 namespace InputManager {
 
 inline bool keys[350];

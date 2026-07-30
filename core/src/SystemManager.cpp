@@ -18,8 +18,8 @@ void SystemManager::add_system(const STAGE stage,
 
 void SystemManager::on_start(entt::registry &world) {
 
-  for (STAGE s : {STAGE::INPUT, STAGE::POSTUPDATE, STAGE::PREUPDATE,
-                  STAGE::UPDATE, STAGE::POSTUPDATE, STAGE::RENDER}) {
+  for (STAGE s : {STAGE::INPUT, STAGE::PREUPDATE, STAGE::UPDATE,
+                  STAGE::POSTUPDATE, STAGE::RENDER}) {
 
     for (auto &sys : systems[s]) {
       sys->on_start(world);
@@ -29,8 +29,8 @@ void SystemManager::on_start(entt::registry &world) {
 
 void SystemManager::update(entt::registry &world, float dt) {
 
-  for (STAGE s : {STAGE::INPUT, STAGE::POSTUPDATE, STAGE::PREUPDATE,
-                  STAGE::UPDATE, STAGE::POSTUPDATE}) {
+  for (STAGE s :
+       {STAGE::INPUT, STAGE::PREUPDATE, STAGE::UPDATE, STAGE::POSTUPDATE}) {
 
     for (auto &sys : systems[s]) {
 
@@ -41,8 +41,8 @@ void SystemManager::update(entt::registry &world, float dt) {
 
 void SystemManager::on_stop(entt::registry &world) {
 
-  for (STAGE s : {STAGE::INPUT, STAGE::POSTUPDATE, STAGE::PREUPDATE,
-                  STAGE::UPDATE, STAGE::POSTUPDATE, STAGE::RENDER}) {
+  for (STAGE s : {STAGE::INPUT, STAGE::PREUPDATE, STAGE::UPDATE,
+                  STAGE::POSTUPDATE, STAGE::RENDER}) {
 
     for (auto &sys : systems[s]) {
       sys->on_stop(world);

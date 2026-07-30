@@ -40,8 +40,9 @@ void Window::setCallBacks() {
   glfwSetWindowSizeCallback(window, Window::windowSizeCallBack);
 }
 
-void Window::windowSizeCallBack(GLFWwindow *window, int width, int height) {
-  glViewport(0, 0, width, height);
+void Window::windowSizeCallBack(GLFWwindow *window, int in_width,
+                                int in_height) {
+  glViewport(0, 0, in_width, in_height);
 }
 
 Window::~Window() {

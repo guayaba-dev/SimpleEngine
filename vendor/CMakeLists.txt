@@ -1,4 +1,4 @@
-add_library(vendor SHARED)
+add_library(vendor STATIC)
 
 # GLAD source
 target_sources(vendor

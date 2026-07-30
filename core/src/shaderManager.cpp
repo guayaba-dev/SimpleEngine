@@ -119,7 +119,7 @@ unsigned int ShaderManager::getShader(const std::string &name) {
 
   unsigned int ID = loadFromCache(name);
 
-  if (ID != 0) {
+  if (ID == 0) {
     std::cerr << "ERROR::SHADER::MANAGER::SHADER_NOT_LOADED\n";
 
     return ID;
